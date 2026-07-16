@@ -4,6 +4,10 @@
 
 Built for the [AI Objectives Institute](https://aiobjectives.org/) **AISCO Hackathon** (food banks + AI agents track), grounded in the real operations of the [Alameda County Community Food Bank (ACCFB)](https://www.accfb.org/).
 
+### ▶︎ Live demo: **https://rescue.intrudr.io**
+
+Open it and press **Run pipeline** to watch the five agents execute in real time — animated data flow, streaming reasoning, and the final rescue plan. Auto-deploys from this repo on every push.
+
 ---
 
 ## The problem
