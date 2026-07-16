@@ -1,0 +1,6 @@
+product_category,typical_shelf_life_days,requires_refrigeration,foodkeeper_basis
+Fresh Produce,5,yes,"Leafy greens/berries 2-5 days refrigerated (USDA FoodKeeper: Lettuce 1-2 wk, Strawberries 2-3 d, Broccoli 3-5 d)"
+Dairy,10,yes,"Milk ~use-by 1 wk, Yogurt 1-2 wk refrigerated (USDA FoodKeeper)"
+Eggs,28,yes,"Fresh eggs in shell 3-5 weeks refrigerated (USDA FoodKeeper)"
+Meat & Poultry,2,yes,"Raw chicken/ground poultry 1-2 days refrigerated (USDA FoodKeeper)"
+Bakery & Bread,4,no,"Bread 3-5 days at pantry temperature (USDA FoodKeeper)"

@@ -1,0 +1,21 @@
+lot_id,product,category,quantity_lbs,received_date,condition,donor
+L01,Romaine Lettuce,Fresh Produce,800,2026-07-13,Good,Safeway
+L02,Whole Milk (gallons),Dairy,600,2026-07-12,Good,Costco
+L03,Chicken Drumsticks,Meat & Poultry,500,2026-07-16,Good,Target
+L04,Strawberries,Fresh Produce,400,2026-07-14,Fair,Bay Area Farms
+L05,Sourdough Loaves,Bakery & Bread,300,2026-07-15,Good,Acme Bread Co
+L06,Large Eggs (dozens),Eggs,900,2026-07-05,Good,Costco
+L07,Ground Turkey,Meat & Poultry,350,2026-07-16,Good,Safeway
+L08,Broccoli Crowns,Fresh Produce,450,2026-07-14,Good,Bay Area Farms
+L09,Yogurt Cups,Dairy,700,2026-07-10,Good,Safeway
+L10,Plain Bagels,Bakery & Bread,250,2026-07-16,Good,Noahs Bakery
+L11,Baby Spinach,Fresh Produce,500,2026-07-14,Fair,Bay Area Farms
+L12,String Cheese,Dairy,300,2026-07-11,Good,Target
+L13,Whole Chicken,Meat & Poultry,600,2026-07-15,Good,Costco
+L14,Dinner Rolls,Bakery & Bread,200,2026-07-15,Good,Acme Bread Co
+L15,Mixed Berries,Fresh Produce,350,2026-07-15,Good,Bay Area Farms
+L16,Cage-Free Eggs (dozens),Eggs,400,2026-07-14,Good,Safeway
+L17,Kale Bunches,Fresh Produce,300,2026-07-13,Fair,Local Growers Co-op
+L18,Butter Milk,Dairy,250,2026-07-13,Good,Target
+L19,Pork Sausage,Meat & Poultry,300,2026-07-16,Good,Safeway
+L20,Ciabatta Rolls,Bakery & Bread,180,2026-07-16,Good,Noahs Bakery

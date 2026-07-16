@@ -1,0 +1,11 @@
+agency_id,name,city,zip,lat,long,opening_hours,refrigeration_available,daily_capacity_lbs,preferred_categories,current_need_score,recent_order_pattern
+A01,East Oakland Community Pantry,Oakland,94621,37.7375,-122.1825,Mon-Fri 09:00-16:00,yes,2600,Fresh Produce;Meat & Poultry;Dairy,92,"Bakery & Bread=55;Fresh Produce=20;Dairy=15;Meat & Poultry=10"
+A02,West Oakland Neighborhood Table,Oakland,94607,37.8060,-122.2900,Tue-Sat 10:00-17:00,yes,1900,Fresh Produce;Dairy;Eggs,85,"Fresh Produce=30;Bakery & Bread=30;Dairy=25;Eggs=15"
+A03,Fruitvale Family Kitchen,Oakland,94601,37.7750,-122.2240,Mon-Fri 08:00-15:00,yes,2200,Fresh Produce;Meat & Poultry;Eggs,80,"Bakery & Bread=45;Dairy=30;Fresh Produce=15;Eggs=10"
+A04,Hayward Meals Collective,Hayward,94544,37.6300,-122.0800,Mon-Sat 09:00-18:00,yes,2400,Fresh Produce;Dairy;Meat & Poultry,72,"Fresh Produce=35;Meat & Poultry=25;Dairy=25;Bakery & Bread=15"
+A05,San Leandro Shared Harvest,San Leandro,94577,37.7220,-122.1560,Wed-Sun 10:00-16:00,no,1500,Bakery & Bread;Eggs;Dairy,58,"Bakery & Bread=40;Eggs=25;Dairy=25;Fresh Produce=10"
+A06,South Berkeley Food Project,Berkeley,94704,37.8650,-122.2580,Mon-Fri 11:00-17:00,yes,1300,Fresh Produce;Eggs;Dairy,52,"Fresh Produce=45;Eggs=25;Dairy=20;Bakery & Bread=10"
+A07,Newark Community Cupboard,Newark,94560,37.5200,-122.0400,Tue-Fri 09:00-14:00,no,1100,Bakery & Bread;Dairy,45,"Bakery & Bread=50;Dairy=30;Fresh Produce=20"
+A08,Fremont Family Resource Pantry,Fremont,94536,37.5580,-121.9880,Mon-Thu 10:00-16:00,yes,1600,Fresh Produce;Dairy;Meat & Poultry,40,"Fresh Produce=40;Dairy=30;Meat & Poultry=20;Bakery & Bread=10"
+A09,Livermore Valley Outreach,Livermore,94550,37.6820,-121.7680,Mon-Wed-Fri 09:00-13:00,yes,900,Fresh Produce;Eggs,30,"Fresh Produce=50;Eggs=30;Dairy=20"
+A10,Pleasanton Helping Hands,Pleasanton,94566,37.6620,-121.8750,Tue-Thu 10:00-15:00,no,700,Bakery & Bread;Eggs,25,"Bakery & Bread=45;Eggs=35;Fresh Produce=20"

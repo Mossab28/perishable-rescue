@@ -1,0 +1,5 @@
+route_id,vehicle_id,vehicle_capacity_lbs,refrigerated,current_stops,remaining_capacity_lbs,delivery_windows,service_zips
+R1,VAN-114,5000,yes,3,2600,09:00-15:00,94621;94607;94601
+R2,TRK-207,8000,yes,5,850,08:00-16:00,94544;94577
+R3,VAN-131,2500,no,2,1400,10:00-16:00,94704;94560
+R4,TRK-222,8000,yes,3,4200,09:00-17:00,94536;94550;94566

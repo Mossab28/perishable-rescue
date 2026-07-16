@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "runs_completed": 0,
+  "description": "Growing skills/rules layer. Risk and Need & Equity agents read this BEFORE reasoning each run. The learn() step appends newly discovered patterns after every run. runs_completed and times_reinforced make the system's improvement over runs measurable, not just claimed.",
+  "rules": [
+    {
+      "id": "R-001",
+      "agent": "risk",
+      "scope": "category:Fresh Produce",
+      "rule": "Fresh Produce received in 'Fair' condition loses roughly 40% of its remaining safe window; apply a 0.6 condition factor to effective shelf life.",
+      "confidence": 0.82,
+      "source": "seed",
+      "times_reinforced": 3
+    },
+    {
+      "id": "R-002",
+      "agent": "risk",
+      "scope": "category:Meat & Poultry",
+      "rule": "Raw Meat & Poultry has a sub-48h safe distribution window (USDA FoodKeeper). Always assign it the highest urgency tier regardless of quantity.",
+      "confidence": 0.95,
+      "source": "seed",
+      "times_reinforced": 5
+    },
+    {
+      "id": "E-001",
+      "agent": "need_equity",
+      "scope": "zips:94621,94607,94601",
+      "rule": "Deep East Oakland, West Oakland, and Fruitvale (need score >80) should be prioritized for protein and fresh produce; these neighborhoods sit well above the 11% Alameda County food-insecurity baseline.",
+      "confidence": 0.88,
+      "source": "seed",
+      "times_reinforced": 4
+    },
+    {
+      "id": "E-002",
+      "agent": "need_equity",
+      "scope": "pattern:demand-drift",
+      "rule": "When an agency's recent orders are >50% Bakery & Bread while its need score is >75, its order pattern has drifted away from nutritional need. Boost its produce/protein allocation rather than honoring the drifted order verbatim.",
+      "confidence": 0.80,
+      "source": "seed",
+      "times_reinforced": 2
+    }
+  ]
+}
