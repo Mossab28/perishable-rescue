@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.env
+runs/
+*.png
+docs/superpowers/
+data/raw/
