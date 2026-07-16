@@ -19,22 +19,9 @@ ACCFB and its partners distributed **60 million pounds of food in 2024 — the m
 
 Five specialized agents, each owning **exactly one constraint**, coordinated end-to-end by a [LangGraph](https://langchain-ai.github.io/langgraph/) orchestrator, with a **Skills/Rules layer that learns after every run**. This is built as production-oriented software — clean module boundaries, real config, documented interfaces — so each agent could later be pointed at ACCFB's real systems instead of our CSVs, not rewritten.
 
-```mermaid
-flowchart LR
-    subgraph PIPE["🔁 Orchestrator (LangGraph StateGraph)"]
-      I["🧾 Intake<br/><i>deterministic</i><br/>parse receiving records"]
-      R["⏱️ Risk<br/><b>LLM</b> + deterministic math<br/>hours-until-unsafe"]
-      N["⚖️ Need & Equity<br/><b>LLM</b><br/>rank agencies by need + drift"]
-      L["🚚 Logistics<br/><i>deterministic gate</i><br/>capacity · cold-chain · windows"]
-      C["📋 Coordinator<br/><b>LLM</b><br/>plan + multilingual notices"]
-      I --> R --> N --> L --> C
-    end
-    C --> REPORT["📊 Rescue Plan Report<br/>Rescue Rate metric"]
-    SKILLS[("🧠 skills/learned_rules.json<br/>learned rules layer")]
-    SKILLS -. read before reasoning .-> R
-    SKILLS -. read before reasoning .-> N
-    C -. write discoveries after run .-> SKILLS
-```
+<p align="center">
+  <img src="docs/architecture.svg" alt="Architecture: Intake → Risk → Need & Equity → Logistics → Coordinator, with a Learned Rules layer read before reasoning and written after every run" width="100%">
+</p>
 
 - **🧾 Intake** — deterministic. Parses raw receiving records into clean lot records. Parsing is not a judgment call, so no LLM.
 - **⏱️ Risk** — deterministic, auditable core math (shelf life × condition vs. age, and lot quantity vs. the network's current movement velocity) decides *which lots are at risk and how many hours they have left*. A **real LLM call** then interprets edge cases and explains each flag in plain language. Reads the learned-rules layer first.

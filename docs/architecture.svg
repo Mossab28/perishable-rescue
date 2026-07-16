@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" font-family="'Segoe UI',system-ui,-apple-system,Roboto,sans-serif">
+  <defs>
+    <marker id="arwSolid" markerWidth="12" markerHeight="12" refX="9" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 Z" fill="#7d93ac"/>
+    </marker>
+    <marker id="arwGold" markerWidth="12" markerHeight="12" refX="9" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 Z" fill="#e8c46b"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1280" height="640" rx="18" fill="#0b121c"/>
+  <rect x="0" y="0" width="1280" height="640" rx="18" fill="none" stroke="#22344a" stroke-width="1.5"/>
+
+  <!-- title -->
+  <text x="40" y="52" fill="#e7eef6" font-size="27" font-weight="800">Perishable Rescue + Equity Coordinator</text>
+  <text x="40" y="80" fill="#7e93ac" font-size="15">Five agents, each owning exactly one constraint — coordinated end to end by a LangGraph pipeline.</text>
+
+  <!-- ================= AGENT ROW ================= -->
+  <!-- boxes at x = 40, 278, 516, 754, 992 ; width 210 ; y 130 ; h 132 -->
+
+  <!-- connectors between agents (drawn first, behind boxes) -->
+  <line x1="250" y1="196" x2="286" y2="196" stroke="#7d93ac" stroke-width="2.5" marker-end="url(#arwSolid)"/>
+  <line x1="488" y1="196" x2="524" y2="196" stroke="#7d93ac" stroke-width="2.5" marker-end="url(#arwSolid)"/>
+  <line x1="726" y1="196" x2="762" y2="196" stroke="#7d93ac" stroke-width="2.5" marker-end="url(#arwSolid)"/>
+  <line x1="964" y1="196" x2="1000" y2="196" stroke="#7d93ac" stroke-width="2.5" marker-end="url(#arwSolid)"/>
+
+  <!-- 1 Intake -->
+  <g>
+    <rect x="40" y="130" width="210" height="132" rx="14" fill="#0e1a28" stroke="#7fd7e6" stroke-width="2"/>
+    <text x="62" y="168" font-size="24">🧾</text>
+    <text x="96" y="166" fill="#e7eef6" font-size="19" font-weight="700">Intake</text>
+    <rect x="96" y="176" width="104" height="20" rx="10" fill="#12303a"/>
+    <text x="106" y="190" fill="#7fd7e6" font-size="11" font-weight="600" letter-spacing="1">DETERMINISTIC</text>
+    <text x="62" y="222" fill="#b9c6d6" font-size="13">Parse receiving</text>
+    <text x="62" y="240" fill="#b9c6d6" font-size="13">records into clean</text>
+    <text x="62" y="258" fill="#b9c6d6" font-size="13">lot records.</text>
+  </g>
+
+  <!-- 2 Risk -->
+  <g>
+    <rect x="278" y="130" width="210" height="132" rx="14" fill="#0e1a28" stroke="#fba94c" stroke-width="2"/>
+    <text x="300" y="168" font-size="24">⏱️</text>
+    <text x="334" y="166" fill="#e7eef6" font-size="19" font-weight="700">Risk</text>
+    <rect x="334" y="176" width="120" height="20" rx="10" fill="#3a2e14"/>
+    <text x="344" y="190" fill="#fba94c" font-size="11" font-weight="600" letter-spacing="1">LLM + MATH</text>
+    <text x="300" y="222" fill="#b9c6d6" font-size="13">Shelf-life math →</text>
+    <text x="300" y="240" fill="#b9c6d6" font-size="13">hours until unsafe.</text>
+    <text x="300" y="258" fill="#b9c6d6" font-size="13">LLM explains edge cases.</text>
+  </g>
+
+  <!-- 3 Need & Equity -->
+  <g>
+    <rect x="516" y="130" width="210" height="132" rx="14" fill="#0e1a28" stroke="#9b8cff" stroke-width="2"/>
+    <text x="538" y="168" font-size="24">⚖️</text>
+    <text x="572" y="166" fill="#e7eef6" font-size="19" font-weight="700">Need &amp; Equity</text>
+    <rect x="538" y="176" width="60" height="20" rx="10" fill="#241f3a"/>
+    <text x="548" y="190" fill="#9b8cff" font-size="11" font-weight="600" letter-spacing="1">LLM</text>
+    <text x="538" y="222" fill="#b9c6d6" font-size="13">Rank agencies by</text>
+    <text x="538" y="240" fill="#b9c6d6" font-size="13">unmet need + how far</text>
+    <text x="538" y="258" fill="#b9c6d6" font-size="13">orders drift from need.</text>
+  </g>
+
+  <!-- 4 Logistics -->
+  <g>
+    <rect x="754" y="130" width="210" height="132" rx="14" fill="#0e1a28" stroke="#35d0e6" stroke-width="2"/>
+    <text x="776" y="168" font-size="24">🚚</text>
+    <text x="810" y="166" fill="#e7eef6" font-size="19" font-weight="700">Logistics</text>
+    <rect x="810" y="176" width="94" height="20" rx="10" fill="#123840"/>
+    <text x="820" y="190" fill="#35d0e6" font-size="11" font-weight="600" letter-spacing="1">HARD GATE</text>
+    <text x="776" y="222" fill="#b9c6d6" font-size="13">Capacity, cold-chain,</text>
+    <text x="776" y="240" fill="#b9c6d6" font-size="13">windows. Deterministic</text>
+    <text x="776" y="258" fill="#b9c6d6" font-size="13">veto — facts, not vibes.</text>
+  </g>
+
+  <!-- 5 Coordinator -->
+  <g>
+    <rect x="992" y="130" width="210" height="132" rx="14" fill="#0e1a28" stroke="#43e08a" stroke-width="2"/>
+    <text x="1014" y="168" font-size="24">📋</text>
+    <text x="1048" y="166" fill="#e7eef6" font-size="19" font-weight="700">Coordinator</text>
+    <rect x="1014" y="176" width="60" height="20" rx="10" fill="#123a26"/>
+    <text x="1024" y="190" fill="#43e08a" font-size="11" font-weight="600" letter-spacing="1">LLM</text>
+    <text x="1014" y="222" fill="#b9c6d6" font-size="13">Assemble rescue plan +</text>
+    <text x="1014" y="240" fill="#b9c6d6" font-size="13">multilingual notices</text>
+    <text x="1014" y="258" fill="#b9c6d6" font-size="13">(EN / ES / ZH).</text>
+  </g>
+
+  <!-- Coordinator → Report -->
+  <line x1="1097" y1="262" x2="1097" y2="322" stroke="#43e08a" stroke-width="2.5" marker-end="url(#arwSolid)"/>
+  <rect x="905" y="322" width="300" height="58" rx="12" fill="#0f2130" stroke="#43e08a" stroke-width="1.5"/>
+  <text x="925" y="349" font-size="18">📊</text>
+  <text x="955" y="347" fill="#e7eef6" font-size="16" font-weight="700">Rescue Plan Report</text>
+  <text x="925" y="369" fill="#8fb3a2" font-size="12.5">Rescue Rate = lbs allocated in time ÷ lbs at risk</text>
+
+  <!-- ================= LEARNING LAYER ================= -->
+  <rect x="300" y="440" width="420" height="86" rx="14" fill="#141d16" stroke="#e8c46b" stroke-width="2"/>
+  <text x="324" y="478" font-size="22">🧠</text>
+  <text x="356" y="476" fill="#e8c46b" font-size="18" font-weight="700">Learned Rules layer</text>
+  <text x="324" y="502" fill="#a99a6a" font-size="13">skills/learned_rules.json — read before reasoning,</text>
+  <text x="324" y="520" fill="#a99a6a" font-size="13">written after every run. Run #1 is good; run #100 is sharper.</text>
+
+  <!-- read arrows: store → Risk & Need&Equity (dashed gold, upward) -->
+  <path d="M 383 440 C 360 380, 383 320, 383 262" fill="none" stroke="#e8c46b" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arwGold)"/>
+  <path d="M 560 440 C 600 380, 621 330, 621 262" fill="none" stroke="#e8c46b" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arwGold)"/>
+  <text x="392" y="360" fill="#e8c46b" font-size="11.5" font-style="italic">read</text>
+  <text x="628" y="360" fill="#e8c46b" font-size="11.5" font-style="italic">read</text>
+
+  <!-- write arrow: Coordinator → store (dashed gold, long curve back) -->
+  <path d="M 992 250 C 700 300, 720 470, 720 483" fill="none" stroke="#e8c46b" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arwGold)"/>
+  <text x="742" y="300" fill="#e8c46b" font-size="11.5" font-style="italic">write discoveries after run</text>
+
+  <!-- ================= LEGEND ================= -->
+  <g>
+    <rect x="905" y="452" width="300" height="70" rx="12" fill="#0e1826" stroke="#22344a" stroke-width="1"/>
+    <text x="925" y="476" fill="#7e93ac" font-size="12" font-weight="600" letter-spacing="1.5">LEGEND</text>
+    <rect x="925" y="486" width="14" height="14" rx="3" fill="#0e1a28" stroke="#9b8cff" stroke-width="2"/>
+    <text x="948" y="497" fill="#b9c6d6" font-size="12.5">Real LLM reasoning (Risk, Need&amp;Equity, Coordinator)</text>
+    <rect x="925" y="504" width="14" height="14" rx="3" fill="#0e1a28" stroke="#35d0e6" stroke-width="2"/>
+    <text x="948" y="515" fill="#b9c6d6" font-size="12.5">Deterministic by design (Intake, Logistics, core math)</text>
+  </g>
+</svg>
