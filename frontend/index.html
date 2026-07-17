@@ -91,7 +91,16 @@
   .msg .who .k{font-family:var(--mono);font-size:9px;color:var(--mist);letter-spacing:.1em}
   .msg .txt{font-size:13.5px;color:var(--ink);line-height:1.45}
   .msg.event .txt{color:var(--graphite);font-style:italic}
+  /* per-agent "what this does" intro, written to the chat before its reasoning */
+  .msg.def{background:#0bb89a12;box-shadow:inset 3px 0 0 var(--signal-deep);border-top-color:transparent}
+  .msg.def .txt{color:#0e3b33;font-size:14px}
   .placeholder{color:var(--mist);font-family:var(--mono);font-size:12px;text-align:center;margin-top:170px;letter-spacing:.04em}
+  /* quick explanation row under the pipeline boxes (5 columns aligned to the nodes) */
+  .acaps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:14px;border-top:1px solid var(--edge)}
+  .acap{padding:12px 12px 2px;border-right:1px solid var(--edge);text-align:center}
+  .acap:last-child{border-right:none}
+  .act{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.02em;color:var(--ink)}
+  .acb{font-size:11.5px;line-height:1.35;color:var(--graphite);margin-top:4px}
 
   /* report */
   .rhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:30px clamp(18px,4vw,48px);border-bottom:1px solid var(--edge)}
@@ -175,6 +184,7 @@
           <g id="edges"></g>
           <g id="nodes"></g>
         </svg>
+        <div id="agentCaps" class="acaps"></div>
       </div>
       <div class="panel">
         <h2><span class="pulse" id="p2"></span>Agent reasoning · stream</h2>
@@ -201,12 +211,23 @@
 
 <script>
 const AGENTS = [
-  {id:"intake",       icon:"🧾", title:"Intake",        role:"parse records",      tag:"DETERMINISTIC", type:"det", x:14},
-  {id:"risk",         icon:"⏱️", title:"Risk",          role:"hours until unsafe", tag:"LLM + MATH",    type:"llm", x:237},
-  {id:"need_equity",  icon:"⚖️", title:"Need & Equity", role:"rank by need + drift",tag:"LLM",          type:"llm", x:460},
-  {id:"logistics",    icon:"🚚", title:"Logistics",     role:"route feasibility",   tag:"HARD GATE",   type:"det", x:683},
-  {id:"coordinator",  icon:"📋", title:"Coordinator",   role:"plan + notices",     tag:"LLM",           type:"llm", x:906},
+  {id:"intake", icon:"🧾", title:"Intake", role:"parse records", tag:"DETERMINISTIC", type:"det", x:14,
+   blurb:"Raw receiving line → clean, typed lot record",
+   desc:"Turns each raw receiving line into a clean, typed lot. E.g. “120 lbs strawberries, received July 15, condition Fair, Safeway” becomes a structured record with a category, an age and a condition — no judgment, just parsing."},
+  {id:"risk", icon:"⏱️", title:"Risk", role:"hours until unsafe", tag:"LLM + MATH", type:"llm", x:237,
+   blurb:"Hours-until-unsafe, from real shelf-life math",
+   desc:"Does the math. Strawberries (Fresh Produce, 5-day shelf) in Fair condition and already 2 days old may have only ~18 h left; raw chicken (Meat & Poultry, ~2-day shelf) can flip to at-risk within a day. It also checks how fast the network is actually clearing that category before flagging — then the LLM writes the plain-language reason."},
+  {id:"need_equity", icon:"⚖️", title:"Need & Equity", role:"rank by need + drift", tag:"LLM", type:"llm", x:460,
+   blurb:"Ranks agencies by real need, corrects drift",
+   desc:"Decides who should get it. An East Oakland agency (zip 94621) with a high need score but bread-heavy recent orders is under-served on produce and protein — that's demand drift. It bumps that agency up for exactly those categories and returns a ranked shortlist, not one pick, so Logistics has fallbacks."},
+  {id:"logistics", icon:"🚚", title:"Logistics", role:"route feasibility", tag:"HARD GATE", type:"det", x:683,
+   blurb:"Cold-chain & capacity veto — physics wins",
+   desc:"Where physics overrides preference. Strawberries and chicken need a refrigerated route; if the truck isn't cold-chain or its reefer capacity is already claimed, it vetoes that match and tries the next agency — exactly like the raw-pork lot refused for a dry route and flagged for manual handling."},
+  {id:"coordinator", icon:"📋", title:"Coordinator", role:"plan + notices", tag:"LLM", type:"llm", x:906,
+   blurb:"One rescue plan + EN / ES / ZH notices",
+   desc:"Assembles the winners into one plan — e.g. “120 lbs strawberries + 80 lbs chicken → East Oakland, via Route 3” — and drafts the pickup notice for that agency in English, Spanish and Chinese, ready to send."},
 ];
+const DESC={}; AGENTS.forEach(a=>DESC[a.id]=a.desc);
 const SIGNAL="#00F0C0", SIGDEEP="#0BB89A", SCHEM="#1E3A5F";
 const typeColor=(t)=> t==="llm"?SIGDEEP:SCHEM;
 const NW=200, NH=126, ROW=32;
@@ -272,6 +293,10 @@ function fitTags(){tagRects.forEach(({rect,text})=>{try{const bb=text.getBBox();
 requestAnimationFrame(fitTags);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitTags);
 
+// quick per-agent explanation under the graph (aligned under the boxes)
+$("#agentCaps").innerHTML = AGENTS.map(a=>
+  `<div class="acap"><div class="act">${a.title}</div><div class="acb">${a.blurb}</div></div>`).join("");
+
 function sendPacket(edgeId,color){
   const path=document.getElementById(edgeId);if(!path)return;
   path.classList.add("hot");setTimeout(()=>path.classList.remove("hot"),1000);
@@ -285,10 +310,10 @@ function sendPacket(edgeId,color){
 
 const stream=$("#stream");
 const meta={intake:["Intake","deterministic"],risk:["Risk","llm + math"],need_equity:["Need & Equity","llm"],logistics:["Logistics","hard gate"],coordinator:["Coordinator","llm"],orchestrator:["Orchestrator","control"]};
-function addMsg(agent,text,isEvent){
+function addMsg(agent,text,cls){
   if(stream.querySelector(".placeholder"))stream.innerHTML="";
   const [nm,kd]=meta[agent]||[agent,""];
-  const d=document.createElement("div");d.className="msg flash"+(isEvent?" event":"");
+  const d=document.createElement("div");d.className="msg flash"+(cls?" "+cls:"");
   d.innerHTML=`<div class="who"><span class="n"></span><span class="k"></span></div><div class="txt"></div>`;
   d.querySelector(".n").textContent=nm;d.querySelector(".k").textContent=kd;d.querySelector(".txt").textContent=text;
   stream.appendChild(d);stream.scrollTop=stream.scrollHeight;
@@ -317,15 +342,16 @@ function handle(ev){
       const b=$("#engineBadge");b.className="badge stamp "+(ev.llm_enabled?"live":"fallback");
       b.textContent=(ev.llm_enabled?"engine · LLM+rules":"engine · rule-based");
       $("#modelBadge").textContent="model · "+(ev.llm_enabled?ev.model:"fallback");
-      addMsg("orchestrator",`Run ${ev.run_date} — ${ev.fresh?"FRESH (learned rules ignored)":"warmed ("+ev.runs_completed_before+" prior runs of learning)"}`,true);
+      addMsg("orchestrator",`Run ${ev.run_date} — ${ev.fresh?"FRESH (learned rules ignored)":"warmed ("+ev.runs_completed_before+" prior runs of learning)"}`,"event");
       break;}
     case "agent_start":{
       const n=nodeEls[ev.agent];if(n){n.g.classList.remove("idle");n.g.classList.add("active");}
+      if(DESC[ev.agent])addMsg(ev.agent,DESC[ev.agent],"def");
       if(lastDone&&lastDone!==ev.agent)sendPacket(`e_${lastDone}_${ev.agent}`,SIGNAL);
       if(ev.agent==="risk")sendPacket("e_skills_risk",SIGNAL);
       if(ev.agent==="need_equity")sendPacket("e_skills_need",SIGNAL);
       break;}
-    case "reasoning": addMsg(ev.agent,ev.text,false); break;
+    case "reasoning": addMsg(ev.agent,ev.text); break;
     case "agent_done":{
       const n=nodeEls[ev.agent];if(n){n.g.classList.remove("active");n.g.classList.add("done");
         const s=(ev.summary||"").replace(/ · (llm|fallback)$/,"");
@@ -333,7 +359,7 @@ function handle(ev){
       lastDone=ev.agent;break;}
     case "final_report": renderReport(ev.plan); break;
     case "run_done": sendPacket("e_coord_skills",SIGNAL); renderLearning(ev.learning,ev.llm_stats); renderContrast(ev.baseline); break;
-    case "error": addMsg("orchestrator","error: "+ev.message,true); break;
+    case "error": addMsg("orchestrator","error: "+ev.message,"event"); break;
   }
 }
 function renderReport(plan){
