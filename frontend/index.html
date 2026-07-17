@@ -23,7 +23,7 @@
 
   .eyebrow{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--graphite)}
   .stamp{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border:1px solid currentColor;font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
-  .wrap{max-width:1360px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
+  .wrap{max-width:1580px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
 
   /* header */
   header{border-bottom:1px solid var(--edge);background:var(--bone);position:sticky;top:0;z-index:20}
@@ -44,7 +44,7 @@
   .badge{color:var(--graphite)}.badge.live{color:var(--signal-deep)}.badge.fallback{color:var(--high)}
 
   /* layout */
-  .grid{display:grid;grid-template-columns:1.85fr 1fr;gap:0;border-bottom:1px solid var(--edge)}
+  .grid{display:grid;grid-template-columns:2.1fr 1fr;gap:0;border-bottom:1px solid var(--edge)}
   @media(max-width:980px){.grid{grid-template-columns:1fr}}
   .panel{padding:22px clamp(18px,3vw,30px)}
   .panel.left{border-right:1px solid var(--edge)}
@@ -64,19 +64,19 @@
   .node.idle{opacity:.5}
   .node.active .nbox{stroke:var(--signal-deep);stroke-width:2.5}
   .node.done .nbox{fill:var(--raised);stroke:var(--ink)}
-  .node .ntitle{fill:var(--ink);font:600 17px var(--body)}
-  .node .nrole{fill:var(--graphite);font:13px var(--mono);letter-spacing:.01em}
-  .node .nsum{fill:var(--signal-deep);font:600 11px var(--mono);letter-spacing:.01em}
+  .node .ntitle{fill:var(--ink);font:600 23px var(--body)}
+  .node .nrole{fill:var(--graphite);font:15px var(--mono);letter-spacing:.01em}
+  .node .nsum{fill:var(--signal-deep);font:600 14px var(--mono);letter-spacing:.01em}
   .store-dot,.node .halo{transform-box:fill-box;transform-origin:center}
-  .node .icon{font-size:19px}
-  .tagbox{font:700 10px var(--disp);letter-spacing:.14em;text-transform:uppercase}
+  .node .icon{font-size:25px}
+  .tagbox{font:700 12px var(--disp);letter-spacing:.14em;text-transform:uppercase}
   .halo{opacity:0}.node.active .halo{opacity:1;animation:sig 1.3s ease-in-out infinite}
   .packet{filter:drop-shadow(0 0 5px var(--signal))}
   .store-box{fill:var(--ink);stroke:var(--signal-deep);stroke-width:2}
-  .store-t{fill:var(--bone);font:700 18px var(--disp);letter-spacing:.01em}
-  .store-s{fill:var(--mist);font:12px var(--mono);letter-spacing:.02em}
-  .store-badge-t{fill:#04120E;font:700 10px var(--disp);letter-spacing:.16em}
-  .loop-label{fill:var(--signal-deep);font:600 11px var(--mono);letter-spacing:.03em}
+  .store-t{fill:var(--bone);font:700 24px var(--disp);letter-spacing:.01em}
+  .store-s{fill:var(--mist);font:14px var(--mono);letter-spacing:.02em}
+  .store-badge-t{fill:#04120E;font:700 12px var(--disp);letter-spacing:.16em}
+  .loop-label{fill:var(--signal-deep);font:600 13px var(--mono);letter-spacing:.03em}
   .store-dot{fill:var(--signal);animation:sig 1.5s ease-in-out infinite}
 
   /* stream */
@@ -148,7 +148,7 @@
     <div class="grid">
       <div class="panel left">
         <h2><span class="pulse" id="p1"></span>Pipeline · live flow &amp; learning loop</h2>
-        <svg id="graph" viewBox="0 0 1000 480" role="img" aria-label="Agent pipeline with learning loop">
+        <svg id="graph" viewBox="0 0 1120 500" role="img" aria-label="Agent pipeline with learning loop">
           <defs>
             <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
               <path d="M0,0 L7,3 L0,6 Z" fill="#A89F8E"/>
@@ -185,16 +185,16 @@
 
 <script>
 const AGENTS = [
-  {id:"intake",       icon:"🧾", title:"Intake",        role:"parse records",      tag:"DETERMINISTIC", type:"det", x:16},
-  {id:"risk",         icon:"⏱️", title:"Risk",          role:"hours until unsafe", tag:"LLM + MATH",    type:"llm", x:216},
-  {id:"need_equity",  icon:"⚖️", title:"Need & Equity", role:"rank by need + drift",tag:"LLM",          type:"llm", x:416},
-  {id:"logistics",    icon:"🚚", title:"Logistics",     role:"capacity · cold · win",tag:"HARD GATE",   type:"det", x:616},
-  {id:"coordinator",  icon:"📋", title:"Coordinator",   role:"plan + notices",     tag:"LLM",           type:"llm", x:816},
+  {id:"intake",       icon:"🧾", title:"Intake",        role:"parse records",      tag:"DETERMINISTIC", type:"det", x:14},
+  {id:"risk",         icon:"⏱️", title:"Risk",          role:"hours until unsafe", tag:"LLM + MATH",    type:"llm", x:237},
+  {id:"need_equity",  icon:"⚖️", title:"Need & Equity", role:"rank by need + drift",tag:"LLM",          type:"llm", x:460},
+  {id:"logistics",    icon:"🚚", title:"Logistics",     role:"capacity · cold · win",tag:"HARD GATE",   type:"det", x:683},
+  {id:"coordinator",  icon:"📋", title:"Coordinator",   role:"plan + notices",     tag:"LLM",           type:"llm", x:906},
 ];
 const SIGNAL="#00F0C0", SIGDEEP="#0BB89A", SCHEM="#1E3A5F";
 const typeColor=(t)=> t==="llm"?SIGDEEP:SCHEM;
-const NW=168, NH=94, ROW=44;
-const STORE={x:338,y:308,w:324,h:96};
+const NW=200, NH=126, ROW=32;
+const STORE={x:350,y:330,w:420,h:128};
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const NS="http://www.w3.org/2000/svg";
 const $=(s)=>document.querySelector(s);
@@ -211,42 +211,45 @@ for(let i=0;i<AGENTS.length-1;i++){
 // learning-loop feedback edges (animated, mint) — the demonstrative centerpiece
 const riskC=cx(AGENTS[1]), needC=cx(AGENTS[2]), coordC=cx(AGENTS[4]);
 edgesG.appendChild(el("path",{class:"edge feedback",id:"e_skills_risk",
-  d:`M ${STORE.x+50} ${STORE.y} C ${STORE.x-30} ${STORE.y-70}, ${riskC-30} ${nbot+90}, ${riskC} ${nbot}`,"marker-end":"url(#arrowSig)"}));
+  d:`M ${STORE.x+64} ${STORE.y} C ${STORE.x-24} ${STORE.y-72}, ${riskC-28} ${nbot+96}, ${riskC} ${nbot}`,"marker-end":"url(#arrowSig)"}));
 edgesG.appendChild(el("path",{class:"edge feedback",id:"e_skills_need",
-  d:`M ${STORE.x+STORE.w/2} ${STORE.y} C ${needC} ${STORE.y-30}, ${needC} ${nbot+50}, ${needC} ${nbot}`,"marker-end":"url(#arrowSig)"}));
+  d:`M ${STORE.x+STORE.w/2} ${STORE.y} C ${needC} ${STORE.y-32}, ${needC} ${nbot+52}, ${needC} ${nbot}`,"marker-end":"url(#arrowSig)"}));
 edgesG.appendChild(el("path",{class:"edge feedback",id:"e_coord_skills",
-  d:`M ${coordC} ${nbot} C ${coordC} ${STORE.y+8}, ${STORE.x+STORE.w+60} ${STORE.y+40}, ${STORE.x+STORE.w} ${STORE.y+STORE.h/2}`,"marker-end":"url(#arrowSig)"}));
+  d:`M ${coordC} ${nbot} C ${coordC} ${STORE.y+4}, ${STORE.x+STORE.w+72} ${STORE.y+40}, ${STORE.x+STORE.w} ${STORE.y+STORE.h/2}`,"marker-end":"url(#arrowSig)"}));
 
 // loop labels
-edgesG.appendChild(txt("loop-label", STORE.x-6, STORE.y-40, "reads rules before reasoning"));
-const wl=txt("loop-label", 984, STORE.y-14, "writes new rules after each run");
+edgesG.appendChild(txt("loop-label", STORE.x-10, STORE.y-42, "reads rules before reasoning"));
+const wl=txt("loop-label", 1108, STORE.y-20, "writes new rules after each run");
 wl.setAttribute("text-anchor","end");edgesG.appendChild(wl);
 
 // learned-rules store — prominent ops-chamber with mint edge + "LEARNS EVERY RUN"
 const sg=el("g");
 sg.appendChild(el("rect",{class:"store-box",x:STORE.x,y:STORE.y,width:STORE.w,height:STORE.h}));
-sg.appendChild(el("circle",{class:"store-dot",cx:STORE.x+24,cy:STORE.y+30,r:5}));
-sg.appendChild(txt("store-t",STORE.x+40,STORE.y+36,"Learned Rules"));
-sg.appendChild(txt("store-s",STORE.x+22,STORE.y+60,"read before · written after run"));
-// badge
-sg.appendChild(el("rect",{x:STORE.x+22,y:STORE.y+70,width:150,height:18,fill:SIGNAL}));
-sg.appendChild(txt("store-badge-t",STORE.x+31,STORE.y+83,"LEARNS EVERY RUN"));
+sg.appendChild(el("circle",{class:"store-dot",cx:STORE.x+32,cy:STORE.y+42,r:7}));
+sg.appendChild(txt("store-t",STORE.x+56,STORE.y+50,"Learned Rules"));
+sg.appendChild(txt("store-s",STORE.x+30,STORE.y+80,"read before · written after run"));
+const badge=el("rect",{x:STORE.x+30,y:STORE.y+92,width:196,height:24,fill:SIGNAL});sg.appendChild(badge);
+sg.appendChild(txt("store-badge-t",STORE.x+41,STORE.y+109,"LEARNS EVERY RUN"));
 nodesG.appendChild(sg);
 
+const tagRects=[];
 for(const a of AGENTS){
   const col=typeColor(a.type);
   const g=el("g",{class:"node idle"});
   g.appendChild(el("rect",{class:"nbox",x:a.x,y:ROW,width:NW,height:NH}));
-  g.appendChild(el("circle",{class:"halo",cx:a.x+NW-18,cy:ROW+18,r:5,fill:SIGNAL}));
-  g.appendChild(txt("icon",a.x+16,ROW+32,a.icon));
-  g.appendChild(txt("ntitle",a.x+44,ROW+32,a.title));
-  g.appendChild(el("rect",{x:a.x+16,y:ROW+42,width:a.tag.length*6.6+16,height:19,fill:"none",stroke:col,"stroke-width":1.25}));
-  g.appendChild(txt("tagbox",a.x+24,ROW+55,a.tag)).setAttribute("fill",col);
-  const role=txt("nrole",a.x+16,ROW+82,a.role);g.appendChild(role);
-  const sum=txt("nsum",a.x+16,ROW+82,"");g.appendChild(sum);
+  g.appendChild(el("circle",{class:"halo",cx:a.x+NW-24,cy:ROW+24,r:7,fill:SIGNAL}));
+  g.appendChild(txt("icon",a.x+22,ROW+46,a.icon));
+  g.appendChild(txt("ntitle",a.x+56,ROW+46,a.title));
+  const tr=el("rect",{x:a.x+22,y:ROW+60,width:10,height:26,fill:"none",stroke:col,"stroke-width":1.5});g.appendChild(tr);
+  const tt=txt("tagbox",a.x+32,ROW+78,a.tag);tt.setAttribute("fill",col);g.appendChild(tt);
+  tagRects.push({rect:tr,text:tt,x0:a.x+22});
+  const role=txt("nrole",a.x+22,ROW+112,a.role);g.appendChild(role);
+  const sum=txt("nsum",a.x+22,ROW+112,"");g.appendChild(sum);
   nodesG.appendChild(g);
   nodeEls[a.id]={g,sum,role};
 }
+// size each tag frame to its actual rendered text (no overflow)
+requestAnimationFrame(()=>{tagRects.forEach(({rect,text,x0})=>{try{const w=text.getBBox().width;rect.setAttribute("width",Math.round(w+18));}catch(e){}});});
 
 function sendPacket(edgeId,color){
   const path=document.getElementById(edgeId);if(!path)return;
