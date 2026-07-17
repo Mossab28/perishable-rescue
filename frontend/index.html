@@ -64,7 +64,7 @@
   .node.idle{opacity:.5}
   .node.active .nbox{stroke:var(--signal-deep);stroke-width:2.5}
   .node.done .nbox{fill:var(--raised);stroke:var(--ink)}
-  .node .ntitle{fill:var(--ink);font:600 23px var(--body)}
+  .node .ntitle{fill:var(--ink);font:600 20px var(--body)}
   .node .nrole{fill:var(--graphite);font:13px var(--mono);letter-spacing:0}
   .node .nsum{fill:var(--signal-deep);font:600 13px var(--mono);letter-spacing:0}
   .store-dot,.node .halo{transform-box:fill-box;transform-origin:center}
@@ -238,8 +238,8 @@ for(const a of AGENTS){
   const g=el("g",{class:"node idle"});
   g.appendChild(el("rect",{class:"nbox",x:a.x,y:ROW,width:NW,height:NH}));
   g.appendChild(el("circle",{class:"halo",cx:a.x+NW-24,cy:ROW+24,r:7,fill:SIGNAL}));
-  g.appendChild(txt("icon",a.x+22,ROW+46,a.icon));
-  g.appendChild(txt("ntitle",a.x+56,ROW+46,a.title));
+  g.appendChild(txt("icon",a.x+20,ROW+45,a.icon));
+  g.appendChild(txt("ntitle",a.x+50,ROW+45,a.title));
   const tr=el("rect",{x:a.x+22,y:ROW+60,width:10,height:26,fill:"none",stroke:col,"stroke-width":1.5});g.appendChild(tr);
   const tt=txt("tagbox",a.x+32,ROW+78,a.tag);tt.setAttribute("fill",col);g.appendChild(tt);
   tagRects.push({rect:tr,text:tt,x0:a.x+22});
