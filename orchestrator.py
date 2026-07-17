@@ -68,9 +68,77 @@ def run_pipeline(emit_cb=None, fresh: bool = False, persist_learning: bool = Tru
         learning.save_rules(updated)
     final["learning"] = learn_info
     final["llm_stats"] = llm.stats()
+    final["baseline"] = naive_baseline(final)
     if emit_cb:
-        emit_cb({"type": "run_done", "learning": learn_info, "llm_stats": llm.stats()})
+        emit_cb({"type": "run_done", "learning": learn_info, "llm_stats": llm.stats(),
+                 "baseline": final["baseline"]})
     return final
+
+
+def naive_baseline(final: dict) -> dict:
+    """Status-quo comparison: what a manual desk does WITHOUT the smart agents —
+    honor standing orders (send each lot to whoever already orders that category most),
+    first-come-first-served, with NO equity/drift correction and NO cold-chain gate
+    (naive dispatch just loads the nearest truck). Cold lots on a non-refrigerated route
+    SPOIL in transit. This is the honest baseline the multi-agent plan is measured against.
+    """
+    at_risk = final["risk"]["at_risk"]
+    agencies = final["agencies"]
+    shelf = final["shelf_life"]
+    routes = [dict(r) for r in final["routes"]]
+    lbs_at_risk = final["risk"]["lbs_at_risk"] or 1.0
+    agency_rem = {a["agency_id"]: a["daily_capacity_lbs"] for a in agencies}
+
+    def share(a, cat):
+        for part in a["recent_order_pattern"].split(";"):
+            if "=" in part:
+                c, p = part.split("=")
+                if c.strip() == cat:
+                    return float(p)
+        return 0.0
+
+    rescued = spoiled = unplaced = high_need = 0.0
+    for lot in at_risk:
+        cat, qty = lot["category"], lot["quantity_lbs"]
+        needs_cold = shelf.get(cat, {}).get("refrigerated", False)
+        placed = False
+        for a in sorted(agencies, key=lambda ag: share(ag, cat), reverse=True):
+            aid = a["agency_id"]
+            if agency_rem[aid] < qty:
+                continue
+            zr = [r for r in routes if a["zip"] in r["service_zips"]
+                  and r["remaining_capacity_lbs"] >= qty]
+            if not zr:
+                continue
+            r = zr[0]  # naive: nearest/first truck, no cold-chain check
+            r["remaining_capacity_lbs"] -= qty
+            agency_rem[aid] -= qty
+            if needs_cold and not r["refrigerated"]:
+                spoiled += qty  # loaded on a warm truck → spoils, not rescued
+            else:
+                rescued += qty
+                if a["current_need_score"] >= 75:
+                    high_need += qty
+            placed = True
+            break
+        if not placed:
+            unplaced += qty
+
+    plan = final["plan"]
+    pipe_high_need = sum(r["lbs"] for r in plan["rows"] if r["need_score"] >= 75)
+    return {
+        "lbs_at_risk": final["risk"]["lbs_at_risk"],
+        "naive_rescue_rate": rescued / lbs_at_risk,
+        "naive_rescued_lbs": rescued,
+        "naive_spoiled_lbs": spoiled,
+        "naive_unplaced_lbs": unplaced,
+        "naive_high_need_lbs": high_need,
+        "pipe_rescue_rate": plan["rescue_rate"],
+        "pipe_rescued_lbs": plan["lbs_moved"],
+        "pipe_high_need_lbs": pipe_high_need,
+        "pipe_spoiled_lbs": 0.0,
+        "drift_corrected": len(final["ranking"]["drift_agencies"]),
+    }
 
 
 # ---------------- Terminal report ----------------
@@ -129,6 +197,16 @@ def print_report(final: dict):
         print(f"  • {_c(r['agency_name'], C.B)} ({r['city']}, need {r['need_score']:.0f}) "
               f"← {r['lbs']:.0f} lbs")
         print(_c(f"      EN: {r['message']['en']}", C.DIM))
+
+    b = final.get("baseline")
+    if b:
+        nr = f"{b['naive_rescue_rate']:.0%}"; pr = f"{b['pipe_rescue_rate']:.0%}"
+        ns = f"{b['naive_spoiled_lbs']:,.0f} lbs"
+        nh = f"{b['naive_high_need_lbs']:,.0f} lbs"; ph = f"{b['pipe_high_need_lbs']:,.0f} lbs"
+        print("\n" + _c("▸ VS STATUS QUO (honor standing orders · nearest truck · no smart gating)", C.B))
+        print(f"  Rescue rate:            status quo {_c(nr, C.YLW)}  →  multi-agent {_c(pr, C.GRN)}")
+        print(f"  Spoiled on warm trucks: status quo {_c(ns, C.RED)}  →  multi-agent {_c('0 lbs (flagged)', C.GRN)}")
+        print(f"  To high-need agencies:  status quo {_c(nh, C.YLW)}  →  multi-agent {_c(ph, C.GRN)}")
 
     lrn = final["learning"]
     print("\n" + _c("▸ LEARNING LAYER", C.B))

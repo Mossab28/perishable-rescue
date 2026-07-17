@@ -95,6 +95,21 @@
 
   /* report */
   .rhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:30px clamp(18px,4vw,48px);border-bottom:1px solid var(--edge)}
+  #contrast:not(:empty){padding:26px clamp(18px,4vw,48px);border-bottom:1px solid var(--edge)}
+  .csec-h{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--graphite);margin-bottom:14px}
+  .csec-h .csub{font-family:var(--mono);font-size:11px;letter-spacing:.01em;text-transform:none;color:var(--mist)}
+  .ctable{border:1px solid var(--edge)}
+  .crow{display:grid;grid-template-columns:1.7fr 1fr 1.5fr}
+  .crow+.crow{border-top:1px solid var(--edge)}
+  .crow>div{padding:13px 18px;font-size:14px;display:flex;align-items:center}
+  .crow.chead>div{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--graphite);background:var(--surface)}
+  .cmetric{color:var(--ink);font-weight:500;border-right:1px solid var(--edge)}
+  .csq{color:var(--graphite);font-family:var(--mono);font-size:13px;border-right:1px solid var(--edge)}
+  .cma{color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:600;gap:8px}
+  .crow.chead .cma{color:var(--signal-deep);background:#0a0f1208}
+  .cdelta{color:var(--signal-deep);font-weight:700}
+  .cwhy{margin-top:12px;font-size:12.5px;color:var(--graphite);line-height:1.5;max-width:80ch}
+  .cwhy b{color:var(--ink);font-weight:600}
   .kpi{display:flex;align-items:baseline;gap:18px}
   .kpi .n{font-family:var(--serif);font-weight:900;font-size:clamp(3.4rem,8vw,5.6rem);line-height:.82;letter-spacing:-.04em;font-variation-settings:'opsz' 144;font-feature-settings:'tnum'}
   .kpi .n.good{color:var(--ink)}.kpi .n.mid{color:var(--high)}.kpi .n.low{color:var(--critical)}
@@ -177,6 +192,7 @@
         </div>
         <div class="learnbar" id="learnbar"></div>
       </div>
+      <div id="contrast"></div>
       <div class="plan-grid" id="planGrid"></div>
       <div id="vetoWrap"></div>
       <div class="foot" id="foot"></div>
@@ -281,7 +297,7 @@ function addMsg(agent,text,isEvent){
 let running=false,lastDone=null;
 function resetUI(){
   lastDone=null;stream.innerHTML='<div class="placeholder">Dispatching…</div>';
-  $("#report").classList.add("hidden");$("#planGrid").innerHTML="";$("#vetoWrap").innerHTML="";$("#learnbar").innerHTML="";$("#foot").innerHTML="";
+  $("#report").classList.add("hidden");$("#planGrid").innerHTML="";$("#vetoWrap").innerHTML="";$("#learnbar").innerHTML="";$("#foot").innerHTML="";$("#contrast").innerHTML="";
   $("#p1").classList.add("on");$("#p2").classList.add("on");
   for(const a of AGENTS){nodeEls[a.id].g.classList.remove("active","done");nodeEls[a.id].g.classList.add("idle");nodeEls[a.id].sum.textContent="";nodeEls[a.id].role.style.display="";}
   document.querySelectorAll(".edge.hot").forEach(e=>e.classList.remove("hot"));
@@ -316,7 +332,7 @@ function handle(ev){
         n.role.style.display="none";n.sum.textContent=s.length>22?s.slice(0,21)+"…":s;}
       lastDone=ev.agent;break;}
     case "final_report": renderReport(ev.plan); break;
-    case "run_done": sendPacket("e_coord_skills",SIGNAL); renderLearning(ev.learning,ev.llm_stats); break;
+    case "run_done": sendPacket("e_coord_skills",SIGNAL); renderLearning(ev.learning,ev.llm_stats); renderContrast(ev.baseline); break;
     case "error": addMsg("orchestrator","error: "+ev.message,true); break;
   }
 }
@@ -356,6 +372,23 @@ function renderLearning(l,stats){
     `new discoveries <b>${l.discoveries.length}</b>`];
   for(const c of chips){const s=document.createElement("span");s.className="chip";s.innerHTML=c;bar.appendChild(s);}
   $("#foot").innerHTML=`LLM calls: ${stats.calls} · est. cost <span style="color:var(--signal-deep)">$${stats.cost_usd.toFixed(4)}</span> · offline rule-based fallback if the API is unavailable`;
+}
+function renderContrast(b){
+  if(!b)return;
+  const pct=(x)=>Math.round(x*100)+"%", lbs=(x)=>Math.round(x).toLocaleString()+" lbs";
+  const dpts=Math.round((b.pipe_rescue_rate-b.naive_rescue_rate)*100);
+  const rows=[
+    {k:"Rescue rate", sq:pct(b.naive_rescue_rate), ma:pct(b.pipe_rescue_rate), d:(dpts>=0?"+":"")+dpts+" pts"},
+    {k:"Spoiled on warm trucks (cold-chain ignored)", sq:lbs(b.naive_spoiled_lbs), ma:"0 lbs — flagged, not lost", d:""},
+    {k:"Delivered to high-need agencies (need ≥ 75)", sq:lbs(b.naive_high_need_lbs), ma:lbs(b.pipe_high_need_lbs), d:""},
+  ];
+  $("#contrast").innerHTML=
+    `<div class="csec-h">Multi-agent vs status quo <span class="csub">— status quo = honor standing orders · nearest truck · no equity or cold-chain gating</span></div>
+     <div class="ctable">
+       <div class="crow chead"><div class="cmetric">Metric</div><div class="csq">Status quo (manual desk)</div><div class="cma">Multi-agent pipeline</div></div>
+       ${rows.map(r=>`<div class="crow"><div class="cmetric">${r.k}</div><div class="csq">${r.sq}</div><div class="cma">${r.ma}${r.d?` <span class="cdelta">${r.d}</span>`:""}</div></div>`).join("")}
+     </div>
+     <div class="cwhy">The status quo fulfils orders as written and dispatches the nearest truck — so it <b>spoils ${lbs(b.naive_spoiled_lbs)}</b> of cold food on warm routes and sends produce/protein to whoever already orders it, delivering <b>${lbs(b.naive_high_need_lbs)}</b> to the highest-need neighborhoods. The five agents catch exactly what a single pass blurs: the cold-chain veto, and the ${b.drift_corrected} demand-drift correction${b.drift_corrected===1?"":"s"} that redirect nutrition to where it's needed most.</div>`;
 }
 $("#runBtn").onclick=()=>startRun(false);
 $("#freshBtn").onclick=()=>startRun(true);

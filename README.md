@@ -41,6 +41,18 @@ Every LLM-backed step has a **rule-based fallback**. With no API key, or if the 
 
 On the committed demo dataset the pipeline rescues **92%** (3,450 / 3,750 lbs) — placing 7 at-risk lots across three high-need Oakland/Hayward agencies and **correctly refusing** to put 300 lbs of raw pork on a non-refrigerated truck, flagging it for manual cold handling instead. A clean 100% would be a red flag; a food bank's real constraint is exactly this kind of tight-fleet tradeoff.
 
+### Proven against the status quo (shown live, not just claimed)
+
+Every run computes a **status-quo baseline** — what a manual desk does *without* the smart agents: honor standing orders, dispatch the nearest truck, no equity or cold-chain gating. The demo shows the two side by side:
+
+| | Status quo (manual) | Multi-agent pipeline |
+|---|--:|--:|
+| Rescue rate | 71% | **92%** (+21 pts) |
+| Spoiled on warm trucks (cold-chain ignored) | 1,100 lbs | **0** (flagged, not lost) |
+| Delivered to highest-need agencies (need ≥ 75) | 0 lbs | **2,600 lbs** |
+
+The status quo fulfils orders as written, so it spoils cold food on warm routes and sends nutrition to whoever already orders it — **0 lbs** reach the neighborhoods furthest behind. The five agents catch exactly what a single pass blurs: the cold-chain veto, and the demand-drift corrections that redirect nutrition to where it's needed most.
+
 ## Why multi-agent (this is the point, not decoration)
 
 A single agent asked to judge shelf-life risk, rank agencies for equity, verify truck capacity, *and* write outreach — all in one prompt — will inevitably blur or drop one constraint, because it is juggling all of them at once. Food-safety judgment gets diluted by language-generation concerns; a hard logistics limit gets treated as a *suggestion* instead of a gate.
