@@ -23,20 +23,16 @@
 
   .eyebrow{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--graphite)}
   .stamp{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border:1px solid currentColor;font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
-  .wrap{max-width:1720px;margin:0 auto;padding:0 clamp(18px,3.5vw,54px)}
-  .sec-h{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--graphite);display:flex;align-items:center;gap:9px}
-  .pulse{width:7px;height:7px;border-radius:999px;background:var(--signal);display:inline-block}
-  @keyframes sig{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.4}}
-  .pulse.on{animation:sig 1.4s ease-in-out infinite}
+  .wrap{max-width:1580px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
 
   /* header */
   header{border-bottom:1px solid var(--edge);background:var(--bone);position:sticky;top:0;z-index:20}
-  .hrow{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:22px;padding:24px 0 20px}
-  .brand .mk{font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:-.02em}
+  .hrow{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:22px;padding:26px 0 22px}
+  .brand .mk{font-family:var(--disp);font-weight:800;font-size:19px;letter-spacing:-.02em}
   .brand .mk .g{color:var(--signal-deep)}
-  h1{font-family:var(--serif);font-weight:800;font-size:clamp(2rem,4.4vw,3.1rem);line-height:.94;letter-spacing:-.035em;margin-top:12px;font-variation-settings:'opsz' 144}
-  .sub{color:var(--graphite);font-size:14.5px;line-height:1.5;max-width:60ch;margin-top:10px}
-  .controls{display:flex;flex-direction:column;align-items:flex-end;gap:11px}
+  h1{font-family:var(--serif);font-weight:800;font-size:clamp(2.1rem,5vw,3.4rem);line-height:.94;letter-spacing:-.035em;margin-top:14px;font-variation-settings:'opsz' 144}
+  .sub{color:var(--graphite);font-size:15px;line-height:1.5;max-width:54ch;margin-top:12px}
+  .controls{display:flex;flex-direction:column;align-items:flex-end;gap:12px}
   .btnrow{display:flex;gap:10px}
   button{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.04em;padding:11px 20px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;transition:all .15s ease;display:flex;align-items:center;gap:9px;text-transform:uppercase}
   button:hover:not(:disabled){background:var(--ink);color:var(--bone)}
@@ -47,37 +43,46 @@
   .badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
   .badge{color:var(--graphite)}.badge.live{color:var(--signal-deep)}.badge.fallback{color:var(--high)}
 
-  /* HERO diagram — full width, principal element */
-  .stage{padding:22px 0 26px;border-bottom:1px solid var(--edge)}
-  .stage .sec-h{margin-bottom:8px}
-  svg#graph{width:100%;height:auto;display:block;overflow:visible}
-  .edge{fill:none;stroke:var(--edge-strong);stroke-width:2}
-  .edge.feedback{stroke:var(--signal-deep);stroke-width:2;stroke-dasharray:6 7;opacity:.72;animation:flow 1.4s linear infinite}
-  @keyframes flow{to{stroke-dashoffset:-26}}
-  .edge.hot{stroke:var(--signal-deep);stroke-width:3;opacity:1}
-  .nbox{fill:var(--surface);stroke:var(--edge-strong);stroke-width:2}
-  .node.idle{opacity:.5}
-  .node.active .nbox{stroke:var(--signal-deep);stroke-width:3}
-  .node.done .nbox{fill:var(--raised);stroke:var(--ink)}
-  .node .ntitle{fill:var(--ink);font:600 30px var(--body)}
-  .node .nrole{fill:var(--graphite);font:18px var(--mono);letter-spacing:0}
-  .node .nsum{fill:var(--signal-deep);font:600 17px var(--mono);letter-spacing:0}
-  .node .icon{font-size:30px}
-  .tagbox{font:700 15px var(--disp);letter-spacing:.13em;text-transform:uppercase}
-  .store-dot,.node .halo{transform-box:fill-box;transform-origin:center}
-  .halo{opacity:0}.node.active .halo{opacity:1;animation:sig 1.3s ease-in-out infinite}
-  .packet{filter:drop-shadow(0 0 6px var(--signal))}
-  .store-box{fill:var(--ink);stroke:var(--signal-deep);stroke-width:2.5}
-  .store-t{fill:var(--bone);font:700 30px var(--disp);letter-spacing:.01em}
-  .store-s{fill:var(--mist);font:17px var(--mono);letter-spacing:.02em}
-  .store-badge-t{fill:#04120E;font:700 15px var(--disp);letter-spacing:.16em}
-  .loop-label{fill:var(--signal-deep);font:600 17px var(--mono);letter-spacing:.02em}
+  /* layout */
+  .grid{display:grid;grid-template-columns:2.1fr 1fr;gap:0;border-bottom:1px solid var(--edge)}
+  @media(max-width:980px){.grid{grid-template-columns:1fr}}
+  .panel{padding:22px clamp(18px,3vw,30px)}
+  .panel.left{border-right:1px solid var(--edge)}
+  @media(max-width:980px){.panel.left{border-right:none;border-bottom:1px solid var(--edge)}}
+  .panel h2{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--graphite);margin-bottom:14px;display:flex;align-items:center;gap:9px}
+  .pulse{width:7px;height:7px;border-radius:999px;background:var(--signal);display:inline-block}
+  @keyframes sig{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.4}}
+  .pulse.on{animation:sig 1.4s ease-in-out infinite}
 
-  /* reasoning console — full width below hero */
-  .console{padding:20px 0 26px;border-bottom:1px solid var(--edge)}
-  .console .sec-h{margin-bottom:12px}
-  #stream{max-height:280px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:0 28px}
-  .msg{border-top:1px solid var(--edge);padding:11px 10px;margin:0 -10px;animation:rise .3s ease}
+  /* node graph */
+  svg#graph{width:100%;height:auto;display:block;overflow:visible}
+  .edge{fill:none;stroke:var(--edge-strong);stroke-width:1.75}
+  .edge.feedback{stroke:var(--signal-deep);stroke-width:1.75;stroke-dasharray:5 6;opacity:.7;animation:flow 1.4s linear infinite}
+  @keyframes flow{to{stroke-dashoffset:-22}}
+  .edge.hot{stroke:var(--signal-deep);stroke-width:2.5;opacity:1}
+  .nbox{fill:var(--surface);stroke:var(--edge-strong);stroke-width:1.75}
+  .node.idle{opacity:.5}
+  .node.active .nbox{stroke:var(--signal-deep);stroke-width:2.5}
+  .node.done .nbox{fill:var(--raised);stroke:var(--ink)}
+  .node .ntitle{fill:var(--ink);font:600 23px var(--body)}
+  .node .nrole{fill:var(--graphite);font:13px var(--mono);letter-spacing:0}
+  .node .nsum{fill:var(--signal-deep);font:600 13px var(--mono);letter-spacing:0}
+  .store-dot,.node .halo{transform-box:fill-box;transform-origin:center}
+  .node .icon{font-size:25px}
+  .tagbox{font:700 12px var(--disp);letter-spacing:.14em;text-transform:uppercase}
+  .halo{opacity:0}.node.active .halo{opacity:1;animation:sig 1.3s ease-in-out infinite}
+  .packet{filter:drop-shadow(0 0 5px var(--signal))}
+  .store-box{fill:var(--ink);stroke:var(--signal-deep);stroke-width:2}
+  .store-t{fill:var(--bone);font:700 24px var(--disp);letter-spacing:.01em}
+  .store-s{fill:var(--mist);font:14px var(--mono);letter-spacing:.02em}
+  .store-badge-t{fill:#04120E;font:700 12px var(--disp);letter-spacing:.16em}
+  .loop-label{fill:var(--signal-deep);font:600 13px var(--mono);letter-spacing:.03em}
+  .store-dot{fill:var(--signal);animation:sig 1.5s ease-in-out infinite}
+
+  /* stream */
+  #stream{height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:0}
+  .msg{border-top:1px solid var(--edge);padding:11px 8px;margin:0 -8px;animation:rise .3s ease}
+  .msg:first-child{border-top:none}
   @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   @keyframes flashmsg{0%{background:rgba(0,240,192,.22);box-shadow:inset 3px 0 0 var(--signal-deep)}100%{background:transparent;box-shadow:inset 3px 0 0 transparent}}
   .msg.flash{animation:rise .3s ease, flashmsg 1.5s ease-out}
@@ -86,10 +91,10 @@
   .msg .who .k{font-family:var(--mono);font-size:9px;color:var(--mist);letter-spacing:.1em}
   .msg .txt{font-size:13.5px;color:var(--ink);line-height:1.45}
   .msg.event .txt{color:var(--graphite);font-style:italic}
-  .placeholder{grid-column:1/-1;color:var(--mist);font-family:var(--mono);font-size:12px;text-align:center;padding:56px 0;letter-spacing:.04em}
+  .placeholder{color:var(--mist);font-family:var(--mono);font-size:12px;text-align:center;margin-top:170px;letter-spacing:.04em}
 
   /* report */
-  .rhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:28px 0;border-bottom:1px solid var(--edge)}
+  .rhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:30px clamp(18px,4vw,48px);border-bottom:1px solid var(--edge)}
   .kpi{display:flex;align-items:baseline;gap:18px}
   .kpi .n{font-family:var(--serif);font-weight:900;font-size:clamp(3.4rem,8vw,5.6rem);line-height:.82;letter-spacing:-.04em;font-variation-settings:'opsz' 144;font-feature-settings:'tnum'}
   .kpi .n.good{color:var(--ink)}.kpi .n.mid{color:var(--high)}.kpi .n.low{color:var(--critical)}
@@ -99,8 +104,8 @@
   .chip{font-family:var(--mono);font-size:11px;padding:9px 14px;color:var(--graphite);border-right:1px solid var(--edge)}
   .chip:last-child{border-right:none}.chip b{color:var(--ink);font-weight:600}
 
-  .plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:0;border-top:1px solid var(--edge)}
-  .agency{padding:20px clamp(18px,2vw,28px);border-right:1px solid var(--edge);border-bottom:1px solid var(--edge)}
+  .plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0;border-top:1px solid var(--edge)}
+  .agency{padding:20px clamp(18px,3vw,28px);border-right:1px solid var(--edge);border-bottom:1px solid var(--edge)}
   .agency .top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:4px}
   .agency h3{font-family:var(--serif);font-weight:800;font-size:20px;letter-spacing:-.02em;line-height:1.05;font-variation-settings:'opsz' 40}
   .agency .lbs{font-family:var(--mono);font-weight:600;font-size:13px;white-space:nowrap;color:var(--signal-deep)}
@@ -110,11 +115,11 @@
   .langs{display:flex;flex-direction:column;gap:8px}
   .lang{font-size:12.5px;color:var(--ink);line-height:1.45;display:grid;grid-template-columns:22px 1fr;gap:8px}
   .lang .fl{font-family:var(--mono);font-size:9px;color:var(--mist);letter-spacing:.08em;padding-top:2px}
-  .veto{padding:18px 0;border-bottom:1px solid var(--edge)}
+  .veto{padding:18px clamp(18px,4vw,48px);border-bottom:1px solid var(--edge);background:var(--surface)}
   .veto .t{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--critical);display:flex;align-items:center;gap:8px}
   .veto .b{font-size:13.5px;color:var(--ink);margin-top:6px;line-height:1.45}
   .veto .b b{font-weight:600}
-  .foot{padding:16px 0;font-family:var(--mono);font-size:11px;color:var(--mist);letter-spacing:.03em}
+  .foot{padding:16px clamp(18px,4vw,48px);font-family:var(--mono);font-size:11px;color:var(--mist);letter-spacing:.03em}
   .hidden{display:none}
 </style>
 </head>
@@ -140,24 +145,31 @@
   </header>
 
   <div class="wrap">
-    <section class="stage">
-      <div class="sec-h"><span class="pulse" id="p1"></span>Pipeline · live flow &amp; learning loop</div>
-      <svg id="graph" viewBox="0 0 1500 560" role="img" aria-label="Agent pipeline with learning loop">
-        <defs>
-          <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#A89F8E"/></marker>
-          <marker id="arrowSig" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#0BB89A"/></marker>
-        </defs>
-        <g id="edges"></g>
-        <g id="nodes"></g>
-      </svg>
-    </section>
+    <div class="grid">
+      <div class="panel left">
+        <h2><span class="pulse" id="p1"></span>Pipeline · live flow &amp; learning loop</h2>
+        <svg id="graph" viewBox="0 0 1120 500" role="img" aria-label="Agent pipeline with learning loop">
+          <defs>
+            <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#A89F8E"/>
+            </marker>
+            <marker id="arrowSig" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#0BB89A"/>
+            </marker>
+          </defs>
+          <g id="edges"></g>
+          <g id="nodes"></g>
+        </svg>
+      </div>
+      <div class="panel">
+        <h2><span class="pulse" id="p2"></span>Agent reasoning · stream</h2>
+        <div id="stream"><div class="placeholder">Press “Run pipeline” to dispatch.</div></div>
+      </div>
+    </div>
+  </div>
 
-    <section class="console">
-      <div class="sec-h"><span class="pulse" id="p2"></span>Agent reasoning · stream</div>
-      <div id="stream"><div class="placeholder">Press “Run pipeline” to dispatch.</div></div>
-    </section>
-
-    <section id="report" class="hidden">
+  <div class="wrap">
+    <div id="report" class="hidden">
       <div class="rhead">
         <div class="kpi">
           <span class="n" id="rate">—</span>
@@ -168,21 +180,21 @@
       <div class="plan-grid" id="planGrid"></div>
       <div id="vetoWrap"></div>
       <div class="foot" id="foot"></div>
-    </section>
+    </div>
   </div>
 
 <script>
 const AGENTS = [
-  {id:"intake",       icon:"🧾", title:"Intake",        role:"parse records",       tag:"DETERMINISTIC", type:"det", x:20},
-  {id:"risk",         icon:"⏱️", title:"Risk",          role:"hours until unsafe",  tag:"LLM + MATH",    type:"llm", x:319},
-  {id:"need_equity",  icon:"⚖️", title:"Need & Equity", role:"rank by need + drift",tag:"LLM",           type:"llm", x:618},
-  {id:"logistics",    icon:"🚚", title:"Logistics",     role:"capacity · cold-chain",tag:"HARD GATE",    type:"det", x:917},
-  {id:"coordinator",  icon:"📋", title:"Coordinator",   role:"plan + notices",      tag:"LLM",           type:"llm", x:1216},
+  {id:"intake",       icon:"🧾", title:"Intake",        role:"parse records",      tag:"DETERMINISTIC", type:"det", x:14},
+  {id:"risk",         icon:"⏱️", title:"Risk",          role:"hours until unsafe", tag:"LLM + MATH",    type:"llm", x:237},
+  {id:"need_equity",  icon:"⚖️", title:"Need & Equity", role:"rank by need + drift",tag:"LLM",          type:"llm", x:460},
+  {id:"logistics",    icon:"🚚", title:"Logistics",     role:"route feasibility",   tag:"HARD GATE",   type:"det", x:683},
+  {id:"coordinator",  icon:"📋", title:"Coordinator",   role:"plan + notices",     tag:"LLM",           type:"llm", x:906},
 ];
 const SIGNAL="#00F0C0", SIGDEEP="#0BB89A", SCHEM="#1E3A5F";
 const typeColor=(t)=> t==="llm"?SIGDEEP:SCHEM;
-const NW=264, NH=152, ROW=36;
-const STORE={x:550,y:392,w:460,h:150};
+const NW=200, NH=126, ROW=32;
+const STORE={x:350,y:330,w:420,h:128};
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const NS="http://www.w3.org/2000/svg";
 const $=(s)=>document.querySelector(s);
@@ -196,26 +208,28 @@ for(let i=0;i<AGENTS.length-1;i++){
   edgesG.appendChild(el("path",{class:"edge",id:`e_${a.id}_${b.id}`,
     d:`M ${a.x+NW-1} ${cy} L ${b.x+1} ${cy}`,"marker-end":"url(#arrow)"}));
 }
+// learning-loop feedback edges (animated, mint) — the demonstrative centerpiece
 const riskC=cx(AGENTS[1]), needC=cx(AGENTS[2]), coordC=cx(AGENTS[4]);
 edgesG.appendChild(el("path",{class:"edge feedback",id:"e_skills_risk",
-  d:`M ${STORE.x+80} ${STORE.y} C ${STORE.x-40} ${STORE.y-84}, ${riskC-40} ${nbot+110}, ${riskC} ${nbot}`,"marker-end":"url(#arrowSig)"}));
+  d:`M ${STORE.x+64} ${STORE.y} C ${STORE.x-24} ${STORE.y-72}, ${riskC-28} ${nbot+96}, ${riskC} ${nbot}`,"marker-end":"url(#arrowSig)"}));
 edgesG.appendChild(el("path",{class:"edge feedback",id:"e_skills_need",
-  d:`M ${STORE.x+STORE.w/2} ${STORE.y} C ${needC} ${STORE.y-40}, ${needC} ${nbot+64}, ${needC} ${nbot}`,"marker-end":"url(#arrowSig)"}));
+  d:`M ${STORE.x+STORE.w/2} ${STORE.y} C ${needC} ${STORE.y-32}, ${needC} ${nbot+52}, ${needC} ${nbot}`,"marker-end":"url(#arrowSig)"}));
 edgesG.appendChild(el("path",{class:"edge feedback",id:"e_coord_skills",
-  d:`M ${coordC} ${nbot} C ${coordC} ${STORE.y}, ${STORE.x+STORE.w+90} ${STORE.y+44}, ${STORE.x+STORE.w} ${STORE.y+STORE.h/2}`,"marker-end":"url(#arrowSig)"}));
+  d:`M ${coordC} ${nbot} C ${coordC} ${STORE.y+4}, ${STORE.x+STORE.w+72} ${STORE.y+40}, ${STORE.x+STORE.w} ${STORE.y+STORE.h/2}`,"marker-end":"url(#arrowSig)"}));
 
-edgesG.appendChild(txt("loop-label", STORE.x-12, STORE.y-52, "reads rules before reasoning"));
-const wl=txt("loop-label", 1490, STORE.y-24, "writes new rules after each run");
+// loop labels
+edgesG.appendChild(txt("loop-label", STORE.x-10, STORE.y-42, "reads rules before reasoning"));
+const wl=txt("loop-label", 1108, STORE.y-20, "writes new rules after each run");
 wl.setAttribute("text-anchor","end");edgesG.appendChild(wl);
 
-// learned-rules store — prominent ops-chamber
+// learned-rules store — prominent ops-chamber with mint edge + "LEARNS EVERY RUN"
 const sg=el("g");
 sg.appendChild(el("rect",{class:"store-box",x:STORE.x,y:STORE.y,width:STORE.w,height:STORE.h}));
-sg.appendChild(el("circle",{class:"store-dot",cx:STORE.x+38,cy:STORE.y+50,r:8,fill:SIGNAL}));
-sg.appendChild(txt("store-t",STORE.x+66,STORE.y+60,"Learned Rules"));
-sg.appendChild(txt("store-s",STORE.x+38,STORE.y+96,"read before · written after run"));
-const badge=el("rect",{x:STORE.x+38,y:STORE.y+110,width:236,height:28,fill:SIGNAL});sg.appendChild(badge);
-sg.appendChild(txt("store-badge-t",STORE.x+51,STORE.y+130,"LEARNS EVERY RUN"));
+sg.appendChild(el("circle",{class:"store-dot",cx:STORE.x+32,cy:STORE.y+42,r:7}));
+sg.appendChild(txt("store-t",STORE.x+56,STORE.y+50,"Learned Rules"));
+sg.appendChild(txt("store-s",STORE.x+30,STORE.y+80,"read before · written after run"));
+const badge=el("rect",{x:STORE.x+30,y:STORE.y+92,width:196,height:24,fill:SIGNAL});sg.appendChild(badge);
+sg.appendChild(txt("store-badge-t",STORE.x+41,STORE.y+109,"LEARNS EVERY RUN"));
 nodesG.appendChild(sg);
 
 const tagRects=[];
@@ -223,18 +237,19 @@ for(const a of AGENTS){
   const col=typeColor(a.type);
   const g=el("g",{class:"node idle"});
   g.appendChild(el("rect",{class:"nbox",x:a.x,y:ROW,width:NW,height:NH}));
-  g.appendChild(el("circle",{class:"halo",cx:a.x+NW-30,cy:ROW+30,r:8,fill:SIGNAL}));
-  g.appendChild(txt("icon",a.x+28,ROW+54,a.icon));
-  g.appendChild(txt("ntitle",a.x+68,ROW+54,a.title));
-  const tr=el("rect",{x:a.x+28,y:ROW+72,width:10,height:32,fill:"none",stroke:col,"stroke-width":1.5});g.appendChild(tr);
-  const tt=txt("tagbox",a.x+40,ROW+94,a.tag);tt.setAttribute("fill",col);g.appendChild(tt);
-  tagRects.push({rect:tr,text:tt});
-  const role=txt("nrole",a.x+28,ROW+134,a.role);g.appendChild(role);
-  const sum=txt("nsum",a.x+28,ROW+134,"");g.appendChild(sum);
+  g.appendChild(el("circle",{class:"halo",cx:a.x+NW-24,cy:ROW+24,r:7,fill:SIGNAL}));
+  g.appendChild(txt("icon",a.x+22,ROW+46,a.icon));
+  g.appendChild(txt("ntitle",a.x+56,ROW+46,a.title));
+  const tr=el("rect",{x:a.x+22,y:ROW+60,width:10,height:26,fill:"none",stroke:col,"stroke-width":1.5});g.appendChild(tr);
+  const tt=txt("tagbox",a.x+32,ROW+78,a.tag);tt.setAttribute("fill",col);g.appendChild(tt);
+  tagRects.push({rect:tr,text:tt,x0:a.x+22});
+  const role=txt("nrole",a.x+22,ROW+112,a.role);g.appendChild(role);
+  const sum=txt("nsum",a.x+22,ROW+112,"");g.appendChild(sum);
   nodesG.appendChild(g);
   nodeEls[a.id]={g,sum,role};
 }
-function fitTags(){tagRects.forEach(({rect,text})=>{try{const bb=text.getBBox();const px=13,py=7;
+// size each tag frame symmetrically around its actual rendered text (never overflows)
+function fitTags(){tagRects.forEach(({rect,text})=>{try{const bb=text.getBBox();const px=11,py=6;
   rect.setAttribute("x",Math.round(bb.x-px));rect.setAttribute("width",Math.round(bb.width+px*2));
   rect.setAttribute("y",Math.round(bb.y-py));rect.setAttribute("height",Math.round(bb.height+py*2));
 }catch(e){}});}
@@ -245,7 +260,7 @@ function sendPacket(edgeId,color){
   const path=document.getElementById(edgeId);if(!path)return;
   path.classList.add("hot");setTimeout(()=>path.classList.remove("hot"),1000);
   if(reduce)return;
-  const c=el("circle",{class:"packet",r:6,fill:color||SIGNAL});
+  const c=el("circle",{class:"packet",r:5,fill:color||SIGNAL});
   const anim=el("animateMotion",{dur:"0.9s",repeatCount:"1",fill:"freeze"});
   const mp=el("mpath");mp.setAttributeNS("http://www.w3.org/1999/xlink","href",`#${edgeId}`);
   anim.appendChild(mp);c.appendChild(anim);edgesG.appendChild(c);
@@ -298,7 +313,7 @@ function handle(ev){
     case "agent_done":{
       const n=nodeEls[ev.agent];if(n){n.g.classList.remove("active");n.g.classList.add("done");
         const s=(ev.summary||"").replace(/ · (llm|fallback)$/,"");
-        n.role.style.display="none";n.sum.textContent=s.length>26?s.slice(0,25)+"…":s;}
+        n.role.style.display="none";n.sum.textContent=s.length>22?s.slice(0,21)+"…":s;}
       lastDone=ev.agent;break;}
     case "final_report": renderReport(ev.plan); break;
     case "run_done": sendPacket("e_coord_skills",SIGNAL); renderLearning(ev.learning,ev.llm_stats); break;
