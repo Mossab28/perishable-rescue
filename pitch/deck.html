@@ -308,18 +308,20 @@
     <style>.vk{display:grid;grid-template-columns:190px 1fr;border:1.5px solid var(--edge-strong);padding:15px 22px;background:var(--surface);align-items:center}.vkl{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--graphite)}.vk span:last-child{font-size:18px}.vkarw{align-self:center;color:var(--edge-strong);font-size:22px;padding:5px 0;font-family:var(--mono)}</style>
   </section>
 
-  <!-- 14 · DEPLOYABLE -->
+  <!-- 14 · LIVE-DATA READY -->
   <section class="slide col" data-n="14">
-    <div class="eyebrow"><span class="tick">▸</span> Not a concept — deployable, production-oriented software</div>
-    <h2 class="sec" style="margin-top:22px;max-width:26ch">Built to plug into ACCFB's real systems, not rewritten for a demo</h2>
-    <div class="row" style="margin-top:44px;gap:20px;flex-wrap:wrap">
-      <div class="dp"><div class="dph">Live in production</div><div class="body mut">Running at <b class="sig">rescue.intrudr.io</b> on a real VPS — auto-deploys on every push.</div></div>
-      <div class="dp"><div class="dph">Never fails on the model</div><div class="body mut">Every LLM step degrades to a rule-based fallback — <b style="color:var(--ink)">identical plan with no API</b>.</div></div>
-      <div class="dp"><div class="dph">Cheap &amp; modular</div><div class="body mut"><span class="mono">~$0.001</span> per run · clean module boundaries so each agent can point at their live inventory / CRM.</div></div>
-      <div class="dp"><div class="dph">Pilot-ready &amp; low-risk</div><div class="body mut">Advisory, not autonomous. Run each morning, compare to the coordinator's plan, measure the rescue-rate delta.</div></div>
+    <div class="eyebrow"><span class="tick">▸</span> Live-data ready · how it connects to your systems</div>
+    <h2 class="sec" style="margin-top:20px;max-width:30ch;font-size:44px">Agents fetch through an interface — swap the adapter, not the code</h2>
+    <div class="ldt" style="margin-top:34px">
+      <div class="ldrow ldhead"><div>Agent needs</div><div>Today (demo adapter)</div><div class="sig">Live source — just point the connector</div></div>
+      <div class="ldrow"><div class="ldm">Inventory lots</div><div class="mono mut">inventory.csv</div><div>Warehouse / inventory system (WMS) feed</div></div>
+      <div class="ldrow"><div class="ldm">Trucks &amp; cold-chain</div><div class="mono mut">routes.csv</div><div>Route &amp; dispatch / fleet system</div></div>
+      <div class="ldrow"><div class="ldm">Agencies &amp; need</div><div class="mono mut">agencies.csv</div><div>Partner directory / CRM + equity data</div></div>
+      <div class="ldrow"><div class="ldm">Shelf-life rules</div><div class="mono sig">USDA FoodKeeper</div><div>Already the real government feed ✓</div></div>
     </div>
+    <div class="body" style="margin-top:22px;max-width:98ch">Intake is the single data entry-point; every downstream agent consumes clean typed records and doesn't care where they came from. The reasoning, the safety gate and the learning layer stay <b>identical</b> — <b class="sig">it's a connector change, not an architecture change.</b> Already live at <b>rescue.intrudr.io</b>, ~$0.001/run, and it runs with no API at all via the rule-based fallback.</div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.dp{flex:1 1 calc(50% - 20px);min-width:0;background:var(--surface);border:1px solid var(--edge);padding:24px}.dph{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}.dp .body{font-size:18px}</style>
+    <style>.ldt{border:1px solid var(--edge-strong)}.ldrow{display:grid;grid-template-columns:1fr 1.1fr 1.6fr}.ldrow+.ldrow{border-top:1px solid var(--edge)}.ldrow>div{padding:14px 22px;font-size:18px;display:flex;align-items:center}.ldrow>div+div{border-left:1px solid var(--edge)}.ldhead>div{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;background:var(--surface)}.ldm{font-family:var(--disp);font-weight:700;font-size:16px}.ldrow .mono{font-size:15px}</style>
   </section>
 
   <!-- 15 · LIVE DEMO -->

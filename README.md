@@ -35,6 +35,19 @@ Five specialized agents, each owning **exactly one constraint**, coordinated end
 
 Every LLM-backed step has a **rule-based fallback**. With no API key, or if the API is down mid-demo, the pipeline produces the *same plan* using deterministic logic — it degrades, it never crashes.
 
+### Live-data ready — swap the adapter, not the code
+
+Each agent fetches its data through a defined interface. Today that interface reads the committed CSVs — but that's just one adapter. **Intake is the single data entry-point**; every downstream agent consumes clean, typed records and doesn't care where they came from. Going live at a food bank is a **connector change, not an architecture change**:
+
+| Agent needs | Today (demo adapter) | Live source |
+|---|---|---|
+| Inventory lots | `data/inventory.csv` | Warehouse / inventory system (WMS) feed |
+| Trucks & cold-chain | `data/routes.csv` | Route & dispatch / fleet system |
+| Agencies & need | `data/agencies.csv` | Partner directory / CRM + equity data |
+| Shelf-life rules | USDA FoodKeeper | already the real government feed ✓ |
+
+The reasoning, the safety gate, and the learning layer stay identical.
+
 ## Impact metric
 
 > **Rescue Rate = pounds allocated in time ÷ pounds at risk identified**
