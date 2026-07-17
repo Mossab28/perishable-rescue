@@ -20,7 +20,10 @@
   .deck{display:flex;flex-direction:column;align-items:center;gap:26px;padding:34px 0}
 
   .slide{position:relative;width:1280px;height:720px;background:var(--bone);
-    padding:64px 76px;overflow:hidden;box-shadow:0 10px 40px #0a0f1220;flex:none}
+    padding:60px 76px;overflow:hidden;box-shadow:0 10px 40px #0a0f1220;flex:none;
+    border-top:6px solid var(--ink)}
+  .slide.chamber{border-top:6px solid var(--signal)}
+  .uline{padding-bottom:18px;border-bottom:1px solid var(--edge);margin-bottom:6px}
   .slide::after{content:attr(data-n) " / 16";position:absolute;right:76px;bottom:42px;
     font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--mist)}
   .wm{position:absolute;left:76px;bottom:42px;font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:-.01em;color:var(--graphite)}
@@ -28,13 +31,15 @@
 
   .eyebrow{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:var(--graphite)}
   .eyebrow .tick{color:var(--signal-deep)}
-  .disp{font-family:var(--serif);font-weight:800;letter-spacing:-.035em;line-height:.94;font-variation-settings:'opsz' 144}
-  .num{font-family:var(--serif);font-weight:900;letter-spacing:-.04em;line-height:.82;font-variation-settings:'opsz' 144;font-feature-settings:'tnum'}
-  .sec{font-family:var(--serif);font-weight:800;letter-spacing:-.025em;line-height:.98;font-size:52px;font-variation-settings:'opsz' 144}
-  .body{font-size:20px;line-height:1.5;color:var(--ink)}
+  .disp{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:.98}
+  .num{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:.86;font-feature-settings:'tnum'}
+  .sec{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;line-height:1.02;font-size:50px}
+  .body{font-size:21px;line-height:1.5;color:var(--ink)}
   .mut{color:var(--graphite)}
   .mono{font-family:var(--mono);font-feature-settings:'tnum'}
-  .stamp{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border:1.5px solid currentColor;font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+  /* section label — borderless (no boxed vignettes), a mint tick bar instead */
+  .stamp{display:inline-flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:currentColor}
+  .stamp::before{content:"";width:3px;height:16px;background:currentColor;flex:none}
   .sig{color:var(--signal-deep)}
   .hr{height:1px;background:var(--edge)}
   .hrk{height:2px;background:var(--ink)}
@@ -66,11 +71,7 @@
     <div class="eyebrow"><span class="tick">▸</span> AISCO Hackathon · Alameda County Community Food Bank</div>
     <h1 class="disp" style="font-size:88px;margin:26px 0 0">Perishable Rescue<br><span style="color:var(--signal-deep)">+ Equity Coordinator</span></h1>
     <p class="body mut" style="font-size:24px;max-width:60ch;margin-top:28px">Five specialized agents replace the manual decision bottleneck at a food bank — <b style="color:var(--ink)">safety-first, equity-aware, and it learns every run.</b></p>
-    <div class="row" style="gap:12px;margin-top:34px">
-      <span class="stamp sig">Deterministic + LLM</span>
-      <span class="stamp mut">Deployable today</span>
-      <span class="stamp mut">rescue.intrudr.io</span>
-    </div>
+    <div class="mono mut" style="font-size:16px;letter-spacing:.03em;margin-top:40px">Deterministic + LLM&nbsp;&nbsp;·&nbsp;&nbsp;Deployable today&nbsp;&nbsp;·&nbsp;&nbsp;<span class="sig">rescue.intrudr.io</span></div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
   </section>
 
@@ -214,43 +215,46 @@
   <!-- 9 · PHASE 1 -->
   <section class="slide col" data-n="09">
     <div class="eyebrow"><span class="tick">▸</span> Phase 1 · data pipeline &amp; deterministic risk</div>
-    <div class="row" style="margin-top:44px;gap:0;flex:1">
+    <div class="row" style="margin-top:36px;gap:0;flex:1;background:var(--surface);border:1px solid var(--edge-strong)">
       <div class="col ph" style="border-right:1px solid var(--edge)">
         <div class="pht">Agent 1 · Intake <span class="mono mut">no AI</span></div>
-        <div class="phl"><b>Input</b> Messy raw CSVs — inventory, shelf-life, routes.</div>
-        <div class="phl"><b>Action</b> Parses unstructured records into clean, workable data structures.</div>
-        <div class="phl"><b>Output</b> Quantified lots &amp; total pounds — <span class="mono">20 lots · 8,630 lbs</span>.</div>
+        <div class="phl"><span class="lab">Input</span>Messy raw CSVs — inventory, shelf-life, routes.</div>
+        <div class="phl"><span class="lab">Action</span>Parses unstructured records into clean, workable data structures.</div>
+        <div class="phl"><span class="lab">Output</span>Quantified lots &amp; total pounds — <span class="mono">20 lots · 8,630 lbs</span>.</div>
       </div>
       <div class="col ph">
         <div class="pht">Agent 2 · Risk <span class="mono sig">deterministic math</span></div>
-        <div class="phl"><b>Action</b> Computes <span class="mono">(effective shelf-life − age) × 24</span>.</div>
-        <div class="phl"><b>Output</b> Exact <b>hours-until-unsafe</b> for every lot.</div>
-        <div class="phl"><b>Outcome</b> Auto-flags critical lots (raw meat at 0 h) with a plain-English urgency tier — an LLM explains the edge cases.</div>
+        <div class="phl"><span class="lab">Action</span>Computes <span class="mono">(effective shelf-life − age) × 24</span>.</div>
+        <div class="phl"><span class="lab">Output</span>Exact <b>hours-until-unsafe</b> for every lot.</div>
+        <div class="phl"><span class="lab">Outcome</span>Auto-flags critical lots (raw meat at 0 h) with a plain-English urgency tier — an LLM explains the edge cases.</div>
       </div>
     </div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.ph{flex:1;padding:6px 40px;gap:18px}.ph:first-child{padding-left:0}.pht{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:.02em;margin-bottom:8px}.phl{font-size:18px;line-height:1.45}.phl b{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);display:block;margin-bottom:3px}</style>
+    <style>.ph{flex:1;padding:38px 42px;gap:22px;justify-content:center}.pht{font-family:var(--disp);font-weight:700;font-size:21px;letter-spacing:.01em;margin-bottom:6px}.phl{font-size:18px;line-height:1.45}.lab{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);display:block;margin-bottom:3px}</style>
   </section>
 
   <!-- 10 · PHASE 2 -->
   <section class="slide col" data-n="10">
     <div class="eyebrow"><span class="tick">▸</span> Phase 2 · agent-based logistics &amp; coordination</div>
-    <div class="row" style="margin-top:40px;gap:0;flex:1">
+    <div class="row" style="margin-top:36px;gap:0;flex:1;background:var(--surface);border:1px solid var(--edge-strong)">
       <div class="col ph2" style="border-right:1px solid var(--edge)">
         <div class="pht">Agent 3 · Need <span class="mono sig">LLM</span></div>
-        <div class="phl">Applies a <b>drift boost</b> to correct agencies under-ordering nutritious food. Outputs a ranked 1-through-5 agency list per lot.</div>
+        <div class="body">Applies a <b>drift boost</b> to correct agencies under-ordering nutritious food, then outputs a ranked 1-through-5 agency list for every lot.</div>
+        <div class="p2foot">Ranks who needs it most →</div>
       </div>
-      <div class="col ph2" style="border-right:1px solid var(--edge);background:var(--surface)">
+      <div class="col ph2" style="border-right:1px solid var(--edge);background:var(--raised)">
         <div class="pht">Agent 4 · Logistics <span class="mono" style="color:var(--schematic)">hard gate</span></div>
-        <div class="phl">Checks cold-chain limits, depletes truck capacity sequentially, cascades to runner-up agencies — and issues a <b style="color:var(--critical)">hard veto</b> on unsafe matches.</div>
+        <div class="body">Checks cold-chain limits, depletes truck capacity sequentially, and cascades to runner-up agencies — issuing a <b style="color:var(--critical)">hard veto</b> on any unsafe match.</div>
+        <div class="p2foot" style="color:var(--critical)">Physics wins over vibes →</div>
       </div>
       <div class="col ph2">
         <div class="pht">Agent 5 · Coordinator <span class="mono sig">LLM</span></div>
-        <div class="phl">Publishes the final <b>Rescue Rate</b> and writes pickup notices in guaranteed <b>English, Spanish &amp; Chinese</b>.</div>
+        <div class="body">Publishes the final <b>Rescue Rate</b> and writes pickup notices in guaranteed <b>English, Spanish &amp; Chinese</b>.</div>
+        <div class="p2foot">Writes the multilingual plan</div>
       </div>
     </div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.ph2{flex:1;padding:6px 34px}.ph2:first-child{padding-left:0}.ph2:last-child{padding-right:0}.ph2{gap:14px}</style>
+    <style>.ph2{flex:1;padding:38px 34px;gap:18px;justify-content:center}.p2foot{margin-top:8px;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--graphite)}</style>
   </section>
 
   <!-- 11 · PROVEN VS STATUS QUO -->
@@ -341,7 +345,7 @@
         <h2 class="disp" style="font-size:60px;margin-top:18px">The whole build<br>is on GitHub</h2>
         <div class="mono" style="font-size:22px;margin-top:22px">github.com/Mossab28/<b>perishable-rescue</b></div>
         <div class="body mut" style="margin-top:16px;max-width:44ch">Five agents · LangGraph orchestrator · learning layer · live SSE demo · real USDA + Alameda data. README, architecture &amp; data sources included.</div>
-        <div class="row" style="gap:12px;margin-top:26px"><span class="stamp sig">92% rescue rate</span><span class="stamp mut">+21 pts vs status quo</span><span class="stamp mut">deployable</span></div>
+        <div class="mono mut" style="font-size:16px;letter-spacing:.03em;margin-top:26px"><span class="sig">92% rescue rate</span>&nbsp;&nbsp;·&nbsp;&nbsp;+21 pts vs status quo&nbsp;&nbsp;·&nbsp;&nbsp;deployable</div>
       </div>
     </div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
