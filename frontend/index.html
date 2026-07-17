@@ -248,8 +248,13 @@ for(const a of AGENTS){
   nodesG.appendChild(g);
   nodeEls[a.id]={g,sum,role};
 }
-// size each tag frame to its actual rendered text (no overflow)
-requestAnimationFrame(()=>{tagRects.forEach(({rect,text,x0})=>{try{const w=text.getBBox().width;rect.setAttribute("width",Math.round(w+18));}catch(e){}});});
+// size each tag frame symmetrically around its actual rendered text (never overflows)
+function fitTags(){tagRects.forEach(({rect,text})=>{try{const bb=text.getBBox();const px=11,py=6;
+  rect.setAttribute("x",Math.round(bb.x-px));rect.setAttribute("width",Math.round(bb.width+px*2));
+  rect.setAttribute("y",Math.round(bb.y-py));rect.setAttribute("height",Math.round(bb.height+py*2));
+}catch(e){}});}
+requestAnimationFrame(fitTags);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitTags);
 
 function sendPacket(edgeId,color){
   const path=document.getElementById(edgeId);if(!path)return;
