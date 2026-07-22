@@ -12,342 +12,209 @@
     --bone:#EFE8DC; --surface:#E8E0D0; --raised:#DDD4C2; --edge:#C8C0B2; --edge-strong:#A89F8E;
     --ink:#0A0F12; --graphite:#525B61; --mist:#8E948A;
     --signal:#00F0C0; --signal-deep:#0BB89A; --schematic:#1E3A5F; --critical:#C0392B;
-    --serif:'Inter',system-ui,sans-serif; --disp:'Inter',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+    --disp:'Inter',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{background:#d9d2c4;font-family:var(--body);color:var(--ink)}
-  .deck{display:flex;flex-direction:column;align-items:center;gap:26px;padding:34px 0}
+  .deck{display:flex;flex-direction:column;align-items:center;gap:26px;padding:34px 0;counter-reset:slide}
 
   .slide{position:relative;width:1280px;height:720px;background:var(--bone);
-    padding:60px 76px;overflow:hidden;box-shadow:0 10px 40px #0a0f1220;flex:none;
-    border-top:6px solid var(--ink)}
+    padding:58px 76px 78px;overflow:hidden;box-shadow:0 10px 40px #0a0f1220;flex:none;
+    border-top:6px solid var(--ink);counter-increment:slide}
   .slide.chamber{border-top:6px solid var(--signal)}
-  .uline{padding-bottom:18px;border-bottom:1px solid var(--edge);margin-bottom:6px}
-  .slide::after{content:attr(data-n) " / 16";position:absolute;right:76px;bottom:42px;
-    font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--mist)}
-  .wm{position:absolute;left:76px;bottom:42px;font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:-.01em;color:var(--graphite)}
+  .slide::after{content:counter(slide);position:absolute;right:76px;bottom:40px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--mist)}
+  .wm{position:absolute;left:76px;bottom:40px;font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:-.01em;color:var(--graphite)}
   .wm .g{color:var(--signal-deep)}
+  .src{position:absolute;left:76px;bottom:60px;right:200px;font-family:var(--mono);font-size:11px;letter-spacing:.01em;color:var(--mist);line-height:1.4}
+  .chamber .wm{color:var(--mist)} .chamber .wm .g{color:var(--signal)}
+  .stag{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--signal-deep);font-weight:600}
 
-  .eyebrow{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:var(--graphite)}
+  .eyebrow{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--graphite)}
   .eyebrow .tick{color:var(--signal-deep)}
   .disp{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:.98}
   .num{font-family:var(--disp);font-weight:800;letter-spacing:-.03em;line-height:.86;font-feature-settings:'tnum'}
-  .sec{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;line-height:1.02;font-size:50px}
+  .sec{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;line-height:1.04;font-size:44px}
   .body{font-size:21px;line-height:1.5;color:var(--ink)}
   .mut{color:var(--graphite)}
   .mono{font-family:var(--mono);font-feature-settings:'tnum'}
-  /* section label — borderless (no boxed vignettes), a mint tick bar instead */
-  .stamp{display:inline-flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:currentColor}
-  .stamp::before{content:"";width:3px;height:16px;background:currentColor;flex:none}
   .sig{color:var(--signal-deep)}
-  .hr{height:1px;background:var(--edge)}
   .hrk{height:2px;background:var(--ink)}
   .row{display:flex} .col{display:flex;flex-direction:column}
-  .head{display:flex;justify-content:space-between;align-items:flex-start}
-
-  /* ops-chamber inset (ink on bone) */
+  .cite{color:var(--signal-deep);font-family:var(--mono);font-size:.62em;vertical-align:super;font-weight:600}
   .chamber{background:var(--ink);color:var(--bone)}
   .chamber .eyebrow{color:var(--mist)} .chamber .mut{color:var(--mist)}
 
   @page{size:1280px 720px;margin:0}
-  @media print{
-    body{background:#fff}
-    .deck{gap:0;padding:0}
-    .slide{box-shadow:none;page-break-after:always;break-after:page}
-    .noprint{display:none!important}
-  }
-  .bar{position:sticky;top:0;z-index:50;width:100%;background:var(--ink);color:var(--bone);
-    font-family:var(--mono);font-size:13px;padding:10px 20px;display:flex;gap:16px;align-items:center;justify-content:center}
+  @media print{ body{background:#fff} .deck{gap:0;padding:0} .slide{box-shadow:none;page-break-after:always;break-after:page} .noprint{display:none!important} }
+  .bar{position:sticky;top:0;z-index:50;width:100%;background:var(--ink);color:var(--bone);font-family:var(--mono);font-size:13px;padding:10px 20px;display:flex;gap:16px;align-items:center;justify-content:center}
   .bar b{color:var(--signal)} .bar kbd{background:#ffffff22;padding:2px 7px;border-radius:3px}
 </style>
 </head>
 <body>
-<div class="bar noprint">Pitch deck ready — press <kbd>⌘/Ctrl + P</kbd> → <b>Save as PDF</b> · enable “Background graphics” · landscape</div>
+<div class="bar noprint">Pitch deck — press <kbd>⌘/Ctrl + P</kbd> → <b>Save as PDF</b> · enable “Background graphics” · landscape</div>
 <div class="deck">
 
   <!-- 1 · TITLE -->
-  <section class="slide col" data-n="01" style="justify-content:center">
+  <section class="slide col" style="justify-content:center">
     <div class="eyebrow"><span class="tick">▸</span> AISCO Hackathon · Alameda County Community Food Bank</div>
-    <h1 class="disp" style="font-size:88px;margin:26px 0 0">Perishable Rescue<br><span style="color:var(--signal-deep)">+ Equity Coordinator</span></h1>
-    <p class="body mut" style="font-size:24px;max-width:60ch;margin-top:28px">Five specialized agents replace the manual decision bottleneck at a food bank — <b style="color:var(--ink)">safety-first, equity-aware, and it learns every run.</b></p>
-    <div class="mono mut" style="font-size:16px;letter-spacing:.03em;margin-top:40px">Deterministic + LLM&nbsp;&nbsp;·&nbsp;&nbsp;Deployable today&nbsp;&nbsp;·&nbsp;&nbsp;<span class="sig">rescue.intrudr.io</span></div>
+    <h1 class="disp" style="font-size:84px;margin:24px 0 0">Perishable Rescue<br><span class="sig">+ Equity Coordinator</span></h1>
+    <p class="body mut" style="font-size:24px;max-width:62ch;margin-top:26px">Five specialized agents replace the manual decision bottleneck at a food bank — <b style="color:var(--ink)">safety-first, equity-aware, and it learns every run.</b></p>
+    <div class="mono mut" style="font-size:16px;letter-spacing:.03em;margin-top:38px">Deterministic + LLM&nbsp;&nbsp;·&nbsp;&nbsp;Live demo →&nbsp;&nbsp;<span class="sig">rescue.intrudr.io</span></div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
   </section>
 
-  <!-- 2 · OPERATIONAL BOTTLENECK -->
-  <section class="slide col" data-n="02">
-    <div class="head"><div class="eyebrow"><span class="tick">▸</span> The operational bottleneck</div></div>
-    <div class="row" style="margin-top:72px;gap:0">
-      <div class="col" style="flex:1;padding-right:40px;border-right:1px solid var(--edge)">
-        <div class="num" style="font-size:86px">60M</div><div class="hrk" style="width:70px;margin:18px 0 22px"></div>
-        <div class="body">Pounds of food handled every year, across <b>400+ partner agencies</b> and <b>510 weekly pickups</b>.</div>
+  <!-- 2 · PROBLEM — paradox + perishables -->
+  <section class="slide col">
+    <div class="stag">The Problem — 01</div>
+    <div class="eyebrow" style="margin-top:6px"><span class="tick">▸</span> No shortage of food — a shortage of time & cold-chain</div>
+    <div class="row" style="margin-top:34px;gap:0">
+      <div class="col" style="flex:1;padding-right:36px;border-right:1px solid var(--edge)">
+        <div class="num" style="font-size:72px">70M<span style="font-size:30px"> tons</span></div>
+        <div class="body mut" style="margin-top:12px;font-size:18px">U.S. food surplus in 2024 — ~29% of the supply. Only <b style="color:var(--ink)">13%</b> of donatable food is donated.<span class="cite">1</span></div>
       </div>
-      <div class="col" style="flex:1;padding:0 40px;border-right:1px solid var(--edge)">
-        <div class="num" style="font-size:86px">95%</div><div class="hrk" style="width:70px;margin:18px 0 22px"></div>
-        <div class="body">Of modern rescued food is <b>highly perishable</b> — fresh produce, protein and dairy, not shelf-stable cans.</div>
+      <div class="col" style="flex:1;padding:0 36px;border-right:1px solid var(--edge)">
+        <div class="num" style="font-size:72px">~80%</div>
+        <div class="body mut" style="margin-top:12px;font-size:18px">of wasted food from farms & businesses is <b style="color:var(--ink)">perishable</b> — meat, produce, dairy.<span class="cite">2</span></div>
       </div>
-      <div class="col" style="flex:1;padding-left:40px">
-        <div class="num" style="font-size:86px;color:var(--signal-deep)">TIME</div><div class="hrk" style="width:70px;margin:18px 0 22px"></div>
-        <div class="body">The problem isn't a lack of food. <b>Manual sorting and routing are simply too slow</b> for fresh goods.</div>
+      <div class="col" style="flex:1;padding-left:36px">
+        <div class="num" style="font-size:72px;color:var(--signal-deep)">60M<span style="font-size:30px" class="mut"> lbs</span></div>
+        <div class="body mut" style="margin-top:12px;font-size:18px">distributed by ACCFB in 2024 · 400+ agencies · <b style="color:var(--ink)">11.6M lbs</b> fresh food rescued.<span class="cite">3</span></div>
       </div>
     </div>
+    <div class="row chamber" style="margin-top:32px;padding:24px 28px;align-items:center;gap:26px">
+      <div class="mono sig" style="font-size:15px;white-space:nowrap">0 h ───── 48 h</div>
+      <div class="body" style="color:var(--bone)">Berries & greens spoil in <b>hours</b>; raw chicken is safe only <b>1–2 days</b>.<span class="cite">4</span> Short on cold storage and reefer trucks, fresh food spoils on the dock — paid for, then thrown away.</div>
+    </div>
+    <div class="src">1 · ReFED 2024 U.S. Food Waste Report. &nbsp; 2 · Feeding America. &nbsp; 3 · ACCFB 2024 Annual Report. &nbsp; 4 · USDA FoodKeeper.</div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
   </section>
 
-  <!-- 3 · THE 48H CLOCK -->
-  <section class="slide col" data-n="03">
-    <div class="eyebrow"><span class="tick">▸</span> Why fresh food is different</div>
-    <h2 class="sec" style="margin-top:22px;max-width:22ch">A 48-hour clock the manual desk can't beat</h2>
-    <div class="row" style="margin-top:54px;gap:26px">
-      <div class="col" style="flex:1;background:var(--surface);border:1px solid var(--edge);padding:28px">
-        <span class="stamp mut" style="align-self:flex-start">Physical limits</span>
-        <div class="body" style="margin-top:18px">Not enough warehouse cold storage to hold perishables · a severe shortage of refrigerated transport trucks.</div>
+  <!-- 3 · PROBLEM — equity + demand drift -->
+  <section class="slide col">
+    <div class="stag">The Problem — 02</div>
+    <div class="eyebrow" style="margin-top:6px"><span class="tick">▸</span> And the food that spoils is the food people need most</div>
+    <div class="row" style="margin-top:30px;gap:26px;align-items:stretch">
+      <div class="col" style="flex:1;background:var(--surface);border:1px solid var(--edge);padding:26px;justify-content:center">
+        <div class="num" style="font-size:56px">182,080</div>
+        <div class="body" style="margin-top:12px;font-size:18px">Alameda residents are food insecure — <b>11%</b>, up from 9.6%.<span class="cite">5</span> ACCFB's lived-experience figure: <b>1 in 4</b>.<span class="cite">3</span> Hunger concentrates in historically <b>redlined</b> East Oakland & Fruitvale.<span class="cite">6</span></div>
       </div>
-      <div class="col" style="flex:1;background:var(--surface);border:1px solid var(--edge);padding:28px">
-        <span class="stamp mut" style="align-self:flex-start">Manual processing</span>
-        <div class="body" style="margin-top:18px">No automated flagging for lots about to expire · one operator juggles many complex variables under time pressure.</div>
+      <div class="col" style="flex:1.15;background:var(--surface);border:1px solid var(--edge);padding:26px;justify-content:center">
+        <div class="sec" style="font-size:26px">Demand drift</div>
+        <div class="body" style="margin-top:12px;font-size:18px">Agencies re-order bread out of habit → the desk "honors the last order" → fresh food expires while bread ships → the <b>wrong food mix quietly locks into the highest-need blocks</b>.</div>
       </div>
     </div>
-    <div class="row chamber" style="margin-top:26px;padding:24px 28px;align-items:center;gap:28px">
-      <div class="mono sig" style="font-size:15px;white-space:nowrap">0 h ───────── 48 h</div>
-      <div class="body" style="color:var(--bone)">Berries and leafy greens deteriorate in <b>hours</b>. Raw chicken and meat are safe for only <b>1–2 days</b>. Without fast processing, fresh food spoils waiting on the dock.</div>
+    <div class="row chamber" style="margin-top:26px;padding:22px 28px">
+      <div class="body" style="color:var(--bone)"><b class="sig">ROOT CAUSE —</b> A decision bottleneck, not a food shortage. A standing order is a <b>flawed signal</b>; one operator can't weigh spoilage, equity and trucks at once under time pressure.</div>
     </div>
+    <div class="src">3 · ACCFB 2024 Annual Report. &nbsp; 5 · Feeding America, Map the Meal Gap 2023 (via Healthy Alameda County). &nbsp; 6 · ACCFB "Roots of Hunger".</div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
   </section>
 
-  <!-- 4 · TWO FAILURES -->
-  <section class="slide col" data-n="04">
-    <div class="eyebrow"><span class="tick">▸</span> Two failures, one root cause</div>
-    <div class="row" style="margin-top:56px;gap:0;flex:1">
-      <div class="col" style="flex:1;padding-right:48px;border-right:1px solid var(--edge)">
-        <div class="stamp" style="color:var(--critical);align-self:flex-start">Operational loss</div>
-        <div class="num" style="font-size:88px;color:var(--critical);margin-top:24px">5–7%</div>
-        <div class="body" style="margin-top:20px">of <b>already-rescued</b> food is lost — food that was paid for and delivered.</div>
-        <div class="body mut" style="margin-top:16px">≈ 3–4 million lbs wasted annually · roughly 2–3 million meals discarded.</div>
-      </div>
-      <div class="col" style="flex:1;padding-left:48px">
-        <div class="stamp" style="color:var(--critical);align-self:flex-start">Equity failure</div>
-        <div class="num" style="font-size:88px;margin-top:24px">1 in 9</div>
-        <div class="body" style="margin-top:20px"><b>182,080 Alameda County residents</b> are food insecure (11%).</div>
-        <div class="body mut" style="margin-top:16px">East Oakland &amp; Fruitvale show severe need — hunger concentration traces decades-old redlining maps.</div>
-      </div>
-    </div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-  </section>
-
-  <!-- 5 · DEMAND DRIFT -->
-  <section class="slide col" data-n="05">
-    <div class="eyebrow"><span class="tick">▸</span> The silent equity leak · demand drift</div>
-    <div class="row" style="margin-top:48px;gap:18px;flex-wrap:wrap">
-      <div class="col dr" style="flex:1;min-width:0"><span class="mono sig">01</span><div class="drt">Habitual ordering</div><div class="body mut" style="font-size:16px">Agencies re-order bread and shelf-stable items out of habit.</div></div>
-      <div class="arw">→</div>
-      <div class="col dr" style="flex:1;min-width:0"><span class="mono sig">02</span><div class="drt">Ignored need</div><div class="body mut" style="font-size:16px">Client surveys show families most want fresh produce, meat, dairy.</div></div>
-      <div class="arw">→</div>
-      <div class="col dr" style="flex:1;min-width:0"><span class="mono sig">03</span><div class="drt">Mismatched delivery</div><div class="body mut" style="font-size:16px">The desk "honors the last order" — bread ships while fresh food expires.</div></div>
-      <div class="arw">→</div>
-      <div class="col dr" style="flex:1;min-width:0"><span class="mono sig">04</span><div class="drt">Equity gap locks in</div><div class="body mut" style="font-size:16px">The wrong food mix quietly flows to the highest-need neighborhoods.</div></div>
-    </div>
-    <div class="row chamber" style="margin-top:44px;padding:26px 30px">
-      <div class="body" style="color:var(--bone)"><b class="sig" style="font-family:var(--disp);letter-spacing:.1em">KEY TAKEAWAY —</b> It's a decision bottleneck, not a food shortage. A standing order is a <b>flawed signal</b>; following it blindly locks in the wrong food mix.</div>
-    </div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.dr{gap:10px;padding:22px;background:var(--surface);border:1px solid var(--edge)}.dr .drt{font-family:var(--serif);font-weight:800;font-size:22px;letter-spacing:-.02em}.arw{align-self:center;font-family:var(--disp);font-weight:800;color:var(--edge-strong);font-size:26px}</style>
-  </section>
-
-  <!-- 6 · WHY MULTI-AGENT -->
-  <section class="slide col" data-n="06">
-    <div class="eyebrow"><span class="tick">▸</span> The architecture decision · why multi-agent</div>
-    <div class="row" style="margin-top:52px;gap:0;flex:1">
-      <div class="col" style="flex:1;padding-right:48px;border-right:1px solid var(--edge)">
-        <div class="stamp mut" style="align-self:flex-start">Status quo</div>
-        <h3 class="sec" style="font-size:38px;margin-top:22px">One monolithic<br>manual decision</h3>
-        <div class="body mut" style="margin-top:22px">A single operator juggles spoilage, equity, trucks <em>and</em> communication at once. Complex variables blur together — and one of them gets <b style="color:var(--critical)">silently dropped</b> under pressure.</div>
-      </div>
-      <div class="col" style="flex:1;padding-left:48px">
-        <div class="stamp sig" style="align-self:flex-start">Our design</div>
-        <h3 class="sec" style="font-size:38px;margin-top:22px">Five agents, one<br>constraint each</h3>
-        <div class="body" style="margin-top:22px">Facts are handled by <b>deterministic code</b>; judgment by <b>LLM reasoning</b>. Strict boundaries mean an AI opinion <b>never blurs with a physical safety rule</b> — nothing gets silently ignored.</div>
-      </div>
-    </div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-  </section>
-
-  <!-- 7 · DETERMINISTIC VS LLM -->
-  <section class="slide col" data-n="07">
-    <div class="eyebrow"><span class="tick">▸</span> Facts vs judgment · the split that matters</div>
-    <div class="ct" style="margin-top:40px">
-      <div class="ctrow cthead"><div></div><div>Deterministic — math &amp; physics</div><div class="sig">LLM — context &amp; equity</div></div>
-      <div class="ctrow"><div class="ctk">Role</div><div>Strictly calculates reality and enforces safety.</div><div>Weighs competing human variables.</div></div>
-      <div class="ctrow"><div class="ctk">Mechanism</div><div>Plain code — the exact same answer every time.</div><div>AI reasoning inside structured prompt guardrails.</div></div>
-      <div class="ctrow"><div class="ctk">Tasks</div><div>Spoilage math (hours-until-unsafe) · truck capacity · route feasibility.</div><div>Ranking who needs it most · correcting demand drift · multilingual notices.</div></div>
-      <div class="ctrow"><div class="ctk">Rule</div><div><b>Physics wins.</b> Safety is never reasoned away.</div><div><b>"Who needs it most"</b> requires real judgment.</div></div>
-    </div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.ct{border:1px solid var(--edge-strong)}.ctrow{display:grid;grid-template-columns:150px 1fr 1fr}.ctrow+.ctrow{border-top:1px solid var(--edge)}.ctrow>div{padding:17px 22px;font-size:17px;line-height:1.4}.ctrow>div+div{border-left:1px solid var(--edge)}.cthead>div{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;background:var(--surface)}.ctk{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--graphite)}</style>
-  </section>
-
-  <!-- 8 · PIPELINE + LEARNING -->
-  <section class="slide col" data-n="08">
-    <div class="eyebrow"><span class="tick">▸</span> The five-agent pipeline</div>
-    <div class="row" style="margin-top:44px;gap:12px">
+  <!-- 4 · SOLUTION — five agents -->
+  <section class="slide col">
+    <div class="stag">The Solution — 01</div>
+    <div class="eyebrow" style="margin-top:6px"><span class="tick">▸</span> Five agents, one constraint each — facts vs judgment</div>
+    <div class="row" style="margin-top:26px;gap:12px">
       <div class="pn"><span class="mono sig">01</span><b>Intake</b><span>clean the data</span></div><div class="pa">→</div>
       <div class="pn"><span class="mono sig">02</span><b>Risk</b><span>what's about to spoil?</span></div><div class="pa">→</div>
       <div class="pn"><span class="mono sig">03</span><b>Need</b><span>who needs it most?</span></div><div class="pa">→</div>
       <div class="pn"><span class="mono sig">04</span><b>Logistics</b><span>can a truck get it there?</span></div><div class="pa">→</div>
-      <div class="pn"><span class="mono sig">05</span><b>Coordinator</b><span>make the plan + notify</span></div>
+      <div class="pn"><span class="mono sig">05</span><b>Coordinator</b><span>plan + notify</span></div>
     </div>
-    <div class="row chamber" style="margin-top:40px;padding:30px 32px;gap:34px;align-items:center;flex:1">
-      <div class="col" style="flex:none;width:260px">
-        <div class="stamp sig" style="align-self:flex-start">🧠 The learning layer</div>
-        <div class="disp" style="font-size:30px;color:var(--bone);margin-top:16px">Sharper<br>every run</div>
+    <div class="row" style="margin-top:26px;gap:22px">
+      <div class="col" style="flex:1;padding-right:22px;border-right:1px solid var(--edge)">
+        <div class="sec" style="font-size:22px;color:var(--schematic)">Deterministic — physics</div>
+        <div class="body mut" style="margin-top:8px;font-size:17px">Spoilage math, truck capacity, cold-chain, route feasibility. Same answer every time — <b style="color:var(--ink)">safety is never reasoned away</b>.</div>
       </div>
-      <div class="col" style="gap:14px">
-        <div class="body" style="color:var(--bone)">▸ Risk &amp; Need agents <b class="sig">read past lessons before deciding</b>.</div>
-        <div class="body" style="color:var(--bone)">▸ The system <b class="sig">records new patterns</b> (e.g. a recurring demand drift) after every run.</div>
-        <div class="body" style="color:var(--bone)">▸ <b class="sig">Never crashes</b> — every step has a rule-based fallback. Run #1 is good; run #100 is exceptional.</div>
+      <div class="col" style="flex:1">
+        <div class="sec" style="font-size:22px;color:var(--signal-deep)">LLM — judgment</div>
+        <div class="body mut" style="margin-top:8px;font-size:17px">Who needs it most, correcting demand drift, multilingual notices. A single blurred prompt would <b style="color:var(--ink)">silently drop one of these</b>.</div>
       </div>
     </div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.pn{flex:1;background:var(--surface);border:1px solid var(--edge-strong);padding:20px 16px;display:flex;flex-direction:column;gap:6px}.pn b{font-family:var(--serif);font-weight:800;font-size:23px;letter-spacing:-.02em}.pn span:last-child{font-family:var(--mono);font-size:13px;color:var(--graphite)}.pn .mono{font-size:14px}.pa{align-self:center;font-family:var(--disp);font-weight:800;color:var(--edge-strong);font-size:22px}</style>
-  </section>
-
-  <!-- 9 · PHASE 1 -->
-  <section class="slide col" data-n="09">
-    <div class="eyebrow"><span class="tick">▸</span> Phase 1 · data pipeline &amp; deterministic risk</div>
-    <div class="row" style="margin-top:36px;gap:0;flex:1;background:var(--surface);border:1px solid var(--edge-strong)">
-      <div class="col ph" style="border-right:1px solid var(--edge)">
-        <div class="pht">Agent 1 · Intake <span class="mono mut">no AI</span></div>
-        <div class="phl"><span class="lab">Input</span>Messy raw CSVs — inventory, shelf-life, routes.</div>
-        <div class="phl"><span class="lab">Action</span>Parses unstructured records into clean, workable data structures.</div>
-        <div class="phl"><span class="lab">Output</span>Quantified lots &amp; total pounds — <span class="mono">20 lots · 8,630 lbs</span>.</div>
-      </div>
-      <div class="col ph">
-        <div class="pht">Agent 2 · Risk <span class="mono sig">deterministic math</span></div>
-        <div class="phl"><span class="lab">Action</span>Computes <span class="mono">(effective shelf-life − age) × 24</span>.</div>
-        <div class="phl"><span class="lab">Output</span>Exact <b>hours-until-unsafe</b> for every lot.</div>
-        <div class="phl"><span class="lab">Outcome</span>Auto-flags critical lots (raw meat at 0 h) with a plain-English urgency tier — an LLM explains the edge cases.</div>
-      </div>
+    <div class="row chamber" style="margin-top:24px;padding:20px 28px;align-items:center;gap:20px">
+      <div class="mono sig" style="font-size:24px">🧠</div>
+      <div class="body" style="color:var(--bone)"><b class="sig">Learning layer —</b> Risk & Need read past lessons before deciding; the system writes new patterns after every run. Never crashes: every step has a rule-based fallback. <b>Run #1 is good; run #100 is exceptional.</b></div>
     </div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.ph{flex:1;padding:38px 42px;gap:22px;justify-content:center}.pht{font-family:var(--disp);font-weight:700;font-size:21px;letter-spacing:.01em;margin-bottom:6px}.phl{font-size:18px;line-height:1.45}.lab{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite);display:block;margin-bottom:3px}</style>
+    <style>.pn{flex:1;background:var(--surface);border:1px solid var(--edge-strong);padding:16px 14px;display:flex;flex-direction:column;gap:5px}.pn b{font-family:var(--disp);font-weight:800;font-size:21px;letter-spacing:-.02em}.pn span:last-child{font-family:var(--mono);font-size:12px;color:var(--graphite)}.pn .mono{font-size:13px}.pa{align-self:center;font-family:var(--disp);font-weight:800;color:var(--edge-strong);font-size:20px}</style>
   </section>
 
-  <!-- 10 · PHASE 2 -->
-  <section class="slide col" data-n="10">
-    <div class="eyebrow"><span class="tick">▸</span> Phase 2 · agent-based logistics &amp; coordination</div>
-    <div class="row" style="margin-top:36px;gap:0;flex:1;background:var(--surface);border:1px solid var(--edge-strong)">
-      <div class="col ph2" style="border-right:1px solid var(--edge)">
-        <div class="pht">Agent 3 · Need <span class="mono sig">LLM</span></div>
-        <div class="body">Applies a <b>drift boost</b> to correct agencies under-ordering nutritious food, then outputs a ranked 1-through-5 agency list for every lot.</div>
-        <div class="p2foot">Ranks who needs it most →</div>
-      </div>
-      <div class="col ph2" style="border-right:1px solid var(--edge);background:var(--raised)">
-        <div class="pht">Agent 4 · Logistics <span class="mono" style="color:var(--schematic)">hard gate</span></div>
-        <div class="body">Checks cold-chain limits, depletes truck capacity sequentially, and cascades to runner-up agencies — issuing a <b style="color:var(--critical)">hard veto</b> on any unsafe match.</div>
-        <div class="p2foot" style="color:var(--critical)">Physics wins over vibes →</div>
-      </div>
-      <div class="col ph2">
-        <div class="pht">Agent 5 · Coordinator <span class="mono sig">LLM</span></div>
-        <div class="body">Publishes the final <b>Rescue Rate</b> and writes pickup notices in guaranteed <b>English, Spanish &amp; Chinese</b>.</div>
-        <div class="p2foot">Writes the multilingual plan</div>
-      </div>
-    </div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.ph2{flex:1;padding:38px 34px;gap:18px;justify-content:center}.p2foot{margin-top:8px;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--graphite)}</style>
-  </section>
-
-  <!-- 11 · PROVEN VS STATUS QUO -->
-  <section class="slide col" data-n="11">
-    <div class="eyebrow"><span class="tick">▸</span> Proven against the status quo — computed every run</div>
-    <div class="ct2" style="margin-top:36px">
-      <div class="c2row c2head"><div>Metric</div><div>Status quo (manual desk)</div><div class="sig">Multi-agent pipeline</div></div>
-      <div class="c2row"><div class="c2m">Rescue rate</div><div class="mono">71%</div><div class="mono"><b>92%</b>&nbsp;&nbsp;<span class="sig">+21 pts</span></div></div>
-      <div class="c2row"><div class="c2m">Spoiled on warm trucks (cold-chain ignored)</div><div class="mono" style="color:var(--critical)">1,100 lbs</div><div class="mono"><b>0 lbs</b>&nbsp;&nbsp;— flagged, not lost</div></div>
-      <div class="c2row"><div class="c2m">Delivered to highest-need agencies (need ≥ 75)</div><div class="mono" style="color:var(--critical)">0 lbs</div><div class="mono"><b>2,600 lbs</b></div></div>
-    </div>
-    <div class="body mut" style="margin-top:26px;max-width:96ch">The status quo honors orders as written and dispatches the nearest truck — so it spoils cold food on warm routes and sends nutrition to whoever already orders it, leaving <b style="color:var(--critical)">0 lbs</b> for the neighborhoods furthest behind. Status quo = "honor standing orders · nearest truck · no equity or cold-chain gating".</div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.ct2{border:1px solid var(--edge-strong)}.c2row{display:grid;grid-template-columns:1.7fr 1fr 1.5fr}.c2row+.c2row{border-top:1px solid var(--edge)}.c2row>div{padding:18px 24px;font-size:19px;display:flex;align-items:center}.c2row>div+div{border-left:1px solid var(--edge)}.c2head>div{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;background:var(--surface)}.c2m{color:var(--ink);font-weight:500;font-size:17px}.c2row .mono{font-size:20px}</style>
-  </section>
-
-  <!-- 12 · 92% RESULT -->
-  <section class="slide col" data-n="12">
-    <div class="row" style="align-items:flex-end;gap:26px">
-      <div class="num" style="font-size:180px;color:var(--signal-deep)">92%</div>
-      <div class="col" style="padding-bottom:26px">
-        <div class="sec" style="font-size:40px">Same-day rescue rate</div>
-        <div class="body mut" style="margin-top:8px">3,450 of 3,750 at-risk pounds placed immediately.</div>
-      </div>
-    </div>
-    <div class="hrk" style="margin:38px 0 34px"></div>
-    <div class="row" style="gap:0">
-      <div class="col rt" style="border-right:1px solid var(--edge)"><div class="rth">Drift corrected</div><div class="body mut">Steered <b style="color:var(--ink)">2,600 lbs</b> of fresh produce &amp; protein to high-need East and West Oakland.</div></div>
-      <div class="col rt" style="border-right:1px solid var(--edge)"><div class="rth">Capacity cascaded</div><div class="body mut">Rerouted <b style="color:var(--ink)">850 lbs</b> of poultry to Hayward when primary targets ran out of intake.</div></div>
-      <div class="col rt"><div class="rth">Continuous learning</div><div class="body mut">Logged spoilage patterns and recorded <span class="mono">A01/A03</span> demand drift for tomorrow's run.</div></div>
-    </div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.rt{flex:1;padding:0 34px;gap:12px}.rt:first-child{padding-left:0}.rt:last-child{padding-right:0}.rth{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}.rt .body{font-size:18px}</style>
-  </section>
-
-  <!-- 13 · THE 300 LB VETO -->
-  <section class="slide col" data-n="13">
-    <div class="eyebrow"><span class="tick">▸</span> Safety overrules optimization · the 300 lb veto</div>
-    <div class="body" style="margin-top:22px;max-width:92ch">A perfect 100% rescue rate would signal a <b>dangerous, unconstrained AI</b>. The 92% outcome proves the system respects absolute safety bounds.</div>
-    <div class="col" style="margin-top:34px;gap:0;align-self:center;width:820px">
-      <div class="vk"><span class="vkl">Item flagged</span><span>300 lbs of raw pork sausage</span></div>
-      <div class="vkarw">↓</div>
-      <div class="vk"><span class="vkl">Safety rule</span><span>Meat &amp; poultry legally require continuous cold-chain transport</span></div>
-      <div class="vkarw">↓</div>
-      <div class="vk"><span class="vkl">Physical reality</span><span>No refrigerated truck available for the assigned ZIP code</span></div>
-      <div class="vkarw">↓</div>
-      <div class="vk" style="border-color:var(--critical)"><span class="vkl" style="color:var(--critical)">System action</span><span><b>VETO</b> — pulled from the automated plan, flagged for manual handling</span></div>
-    </div>
-    <div class="row chamber" style="margin-top:auto;padding:22px 30px"><div class="body" style="color:var(--bone)"><b class="sig" style="font-family:var(--disp);letter-spacing:.1em">CONCLUSION —</b> Physics wins over vibes. Safety overrules optimization.</div></div>
-    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.vk{display:grid;grid-template-columns:190px 1fr;border:1.5px solid var(--edge-strong);padding:15px 22px;background:var(--surface);align-items:center}.vkl{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--graphite)}.vk span:last-child{font-size:18px}.vkarw{align-self:center;color:var(--edge-strong);font-size:22px;padding:5px 0;font-family:var(--mono)}</style>
-  </section>
-
-  <!-- 14 · LIVE-DATA READY -->
-  <section class="slide col" data-n="14">
-    <div class="eyebrow"><span class="tick">▸</span> Live-data ready · how it connects to your systems</div>
-    <h2 class="sec" style="margin-top:20px;max-width:30ch;font-size:44px">Agents fetch through an interface — swap the adapter, not the code</h2>
-    <div class="ldt" style="margin-top:34px">
+  <!-- 5 · SOLUTION — live-data ready -->
+  <section class="slide col">
+    <div class="stag">The Solution — 02</div>
+    <div class="eyebrow" style="margin-top:6px"><span class="tick">▸</span> Live-data ready — swap the adapter, not the code</div>
+    <div class="ldt" style="margin-top:28px">
       <div class="ldrow ldhead"><div>Agent needs</div><div>Today (demo adapter)</div><div class="sig">Live source — just point the connector</div></div>
-      <div class="ldrow"><div class="ldm">Inventory lots</div><div class="mono mut">inventory.csv</div><div>Warehouse / inventory system (WMS) feed</div></div>
+      <div class="ldrow"><div class="ldm">Inventory lots</div><div class="mono mut">inventory.csv</div><div>Inventory / WMS — <b>Primarius</b> or <b>Ceres</b>, barcode-tracked<span class="cite">7</span></div></div>
       <div class="ldrow"><div class="ldm">Trucks &amp; cold-chain</div><div class="mono mut">routes.csv</div><div>Route &amp; dispatch / fleet system</div></div>
       <div class="ldrow"><div class="ldm">Agencies &amp; need</div><div class="mono mut">agencies.csv</div><div>Partner directory / CRM + equity data</div></div>
       <div class="ldrow"><div class="ldm">Shelf-life rules</div><div class="mono sig">USDA FoodKeeper</div><div>Already the real government feed ✓</div></div>
     </div>
-    <div class="body" style="margin-top:22px;max-width:98ch">Intake is the single data entry-point; every downstream agent consumes clean typed records and doesn't care where they came from. The reasoning, the safety gate and the learning layer stay <b>identical</b> — <b class="sig">it's a connector change, not an architecture change.</b> Already live at <b>rescue.intrudr.io</b>, ~$0.001/run, and it runs with no API at all via the rule-based fallback.</div>
+    <div class="body" style="margin-top:18px;max-width:104ch">Over half of U.S. food banks already run <b>Ceres</b> or <b>Primarius</b> — barcode-level, CSV/API-exportable<span class="cite">7</span> — so our CSV adapter maps <b>1:1</b> to what they already export, and their barcodes are our lot-level traceability. <b class="sig">It's a connector change, not an architecture change.</b></div>
+    <div class="src">7 · Ceres (Microsoft Dynamics, 110+ food banks) &amp; Primarius are the dominant food-bank inventory systems, both barcode-tracked with Feeding America integration (goprimarius.com · esopro.com).</div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
-    <style>.ldt{border:1px solid var(--edge-strong)}.ldrow{display:grid;grid-template-columns:1fr 1.1fr 1.6fr}.ldrow+.ldrow{border-top:1px solid var(--edge)}.ldrow>div{padding:14px 22px;font-size:18px;display:flex;align-items:center}.ldrow>div+div{border-left:1px solid var(--edge)}.ldhead>div{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;background:var(--surface)}.ldm{font-family:var(--disp);font-weight:700;font-size:16px}.ldrow .mono{font-size:15px}</style>
+    <style>.ldt{border:1px solid var(--edge-strong)}.ldrow{display:grid;grid-template-columns:1fr 1.1fr 1.6fr}.ldrow+.ldrow{border-top:1px solid var(--edge)}.ldrow>div{padding:13px 22px;font-size:18px;display:flex;align-items:center}.ldrow>div+div{border-left:1px solid var(--edge)}.ldhead>div{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;background:var(--surface)}.ldm{font-family:var(--disp);font-weight:700;font-size:16px}.ldrow .mono{font-size:15px}</style>
   </section>
 
-  <!-- 15 · LIVE DEMO -->
-  <section class="slide col chamber" data-n="15" style="justify-content:center;align-items:center;text-align:center">
-    <div class="eyebrow" style="color:var(--mist)"><span class="tick">▸</span> Run it live</div>
-    <h2 class="disp" style="font-size:76px;color:var(--bone);margin-top:22px">See the five agents<br>execute in real time</h2>
-    <div class="row" style="align-items:center;gap:40px;margin-top:42px">
-      <div style="background:var(--bone);padding:16px"><img src="qr_demo.svg" width="150" height="150" alt="QR — live demo"></div>
-      <div class="col" style="align-items:flex-start;text-align:left">
-        <div class="mono sig" style="font-size:30px">rescue.intrudr.io</div>
-        <div class="body" style="color:var(--bone);margin-top:12px;max-width:34ch">Press <b class="sig">Run pipeline</b> — animated data flow, live agent reasoning, the status-quo contrast, and the final rescue plan.</div>
+  <!-- 6 · THE DEMO (hero) -->
+  <section class="slide col chamber" style="justify-content:center">
+    <div class="stag" style="color:var(--signal)">▶︎ The Demo — watch it work</div>
+    <h2 class="disp" style="font-size:80px;color:var(--bone);margin-top:14px">See five agents run,<br>live, in 20 seconds</h2>
+    <div class="row" style="align-items:center;gap:44px;margin-top:38px">
+      <div style="background:var(--bone);padding:16px"><img src="qr_demo.svg" width="160" height="160" alt="QR — live demo"></div>
+      <div class="col" style="align-items:flex-start;text-align:left;max-width:52ch">
+        <div class="mono sig" style="font-size:32px">rescue.intrudr.io</div>
+        <div class="body" style="color:var(--bone);margin-top:14px">Hit <b class="sig">Run pipeline</b> and watch each agent light up, explain itself with a real example, hand off the data, then produce the rescue plan, the multilingual notices, and a <b>live side-by-side against the status quo</b>.</div>
+        <div class="mono mut" style="font-size:14px;margin-top:16px;color:var(--mist)">real OpenRouter LLM calls · rule-based fallback if the API is down</div>
       </div>
     </div>
-    <div class="wm" style="color:var(--mist)">Perishable Rescue<span class="g" style="color:var(--signal)"> · Equity</span></div>
+    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
   </section>
 
-  <!-- 16 · CLOSE / GITHUB -->
-  <section class="slide col" data-n="16" style="justify-content:center">
+  <!-- 7 · PROOF — vs status quo + veto -->
+  <section class="slide col">
+    <div class="stag">The Proof — computed on every run</div>
+    <div class="eyebrow" style="margin-top:6px"><span class="tick">▸</span> Multi-agent vs the status quo — same day, same data</div>
+    <div class="ct2" style="margin-top:24px">
+      <div class="c2row c2head"><div>Metric</div><div>Status quo (manual desk)</div><div class="sig">Multi-agent pipeline</div></div>
+      <div class="c2row"><div class="c2m">Rescue rate</div><div class="mono">71%</div><div class="mono"><b>92%</b>&nbsp;&nbsp;<span class="sig">+21 pts</span></div></div>
+      <div class="c2row"><div class="c2m">Spoiled on warm trucks (cold-chain ignored)</div><div class="mono" style="color:var(--critical)">1,100 lbs</div><div class="mono"><b>0 lbs</b>&nbsp;&nbsp;— flagged</div></div>
+      <div class="c2row"><div class="c2m">Delivered to highest-need agencies</div><div class="mono" style="color:var(--critical)">0 lbs</div><div class="mono"><b>2,600 lbs</b></div></div>
+    </div>
+    <div class="row chamber" style="margin-top:22px;padding:20px 28px">
+      <div class="body" style="color:var(--bone)"><b class="sig">SAFETY HOLDS —</b> It's not 100% by design. It refused to put 300 lbs of raw pork on a non-refrigerated truck and flagged it for manual handling.<span class="cite">4</span> <b>Physics wins over vibes.</b></div>
+    </div>
+    <div class="src">Status quo = honor standing orders · nearest truck · no gating. &nbsp; 4 · USDA FoodKeeper — poultry requires cold-chain.</div>
+    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
+    <style>.ct2{border:1px solid var(--edge-strong)}.c2row{display:grid;grid-template-columns:1.7fr 1fr 1.4fr}.c2row+.c2row{border-top:1px solid var(--edge)}.c2row>div{padding:15px 24px;font-size:18px;display:flex;align-items:center}.c2row>div+div{border-left:1px solid var(--edge)}.c2head>div{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;background:var(--surface)}.c2m{color:var(--ink);font-weight:500;font-size:16px}.c2row .mono{font-size:19px}</style>
+  </section>
+
+  <!-- 8 · SOURCES -->
+  <section class="slide col">
+    <div class="eyebrow"><span class="tick">▸</span> Sources — every number is grounded in public data</div>
+    <div class="col" style="margin-top:30px;gap:15px">
+      <div class="sr"><span class="srn">1</span><div><b>ReFED — 2024 U.S. Food Waste Report.</b> 70M tons surplus (~29%); ~13% of donatable food donated. <span class="mono mut">refed.org</span></div></div>
+      <div class="sr"><span class="srn">2</span><div><b>Feeding America — "Reduce Food Waste".</b> 4.1B lbs rescued FY2024; ~80% of wasted food is perishable. <span class="mono mut">feedingamerica.org/our-work/reduce-food-waste</span></div></div>
+      <div class="sr"><span class="srn">3</span><div><b>ACCFB — 2024 Annual Report.</b> 60M lbs distributed; 400+ agencies; 11.6M lbs rescued; "1 in 4" lived experience. <span class="mono mut">accfb.org/annual-report-2024</span></div></div>
+      <div class="sr"><span class="srn">4</span><div><b>USDA FSIS — FoodKeeper data.</b> Shelf-life for 400+ items; raw poultry 1–2 days, cold-chain required. <span class="mono mut">catalog.data.gov · fsis-foodkeeper-data</span></div></div>
+      <div class="sr"><span class="srn">5</span><div><b>Feeding America — Map the Meal Gap 2023</b> (via Healthy Alameda County). Alameda 11% = 182,080; CA 13.7%, U.S. 14.5%. <span class="mono mut">healthyalamedacounty.org</span></div></div>
+      <div class="sr"><span class="srn">6</span><div><b>ACCFB — "Roots of Hunger" (redlining).</b> Hunger concentrated in historically redlined East Oakland & Fruitvale. <span class="mono mut">accfb.org/redlining</span></div></div>
+    </div>
+    <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>
+    <style>.sr{display:grid;grid-template-columns:34px 1fr;gap:6px;align-items:start;font-size:16px;line-height:1.45;color:var(--ink)}.srn{font-family:var(--mono);font-weight:600;color:var(--signal-deep)}.sr b{font-weight:700}</style>
+  </section>
+
+  <!-- 9 · CLOSE / GITHUB -->
+  <section class="slide col" style="justify-content:center">
     <div class="row" style="align-items:center;gap:56px">
-      <div style="border:1px solid var(--edge);padding:14px;background:#fff"><img src="qr_github.svg" width="180" height="180" alt="QR — GitHub repo"></div>
+      <div style="border:1px solid var(--edge);padding:14px;background:#fff"><img src="qr_github.svg" width="176" height="176" alt="QR — GitHub repo"></div>
       <div class="col">
         <div class="eyebrow"><span class="tick">▸</span> Open source · judged deliverable</div>
-        <h2 class="disp" style="font-size:60px;margin-top:18px">The whole build<br>is on GitHub</h2>
-        <div class="mono" style="font-size:22px;margin-top:22px">github.com/Mossab28/<b>perishable-rescue</b></div>
-        <div class="body mut" style="margin-top:16px;max-width:44ch">Five agents · LangGraph orchestrator · learning layer · live SSE demo · real USDA + Alameda data. README, architecture &amp; data sources included.</div>
-        <div class="mono mut" style="font-size:16px;letter-spacing:.03em;margin-top:26px"><span class="sig">92% rescue rate</span>&nbsp;&nbsp;·&nbsp;&nbsp;+21 pts vs status quo&nbsp;&nbsp;·&nbsp;&nbsp;deployable</div>
+        <h2 class="disp" style="font-size:58px;margin-top:16px">The whole build<br>is on GitHub</h2>
+        <div class="mono" style="font-size:22px;margin-top:20px">github.com/Mossab28/<b>perishable-rescue</b></div>
+        <div class="body mut" style="margin-top:14px;max-width:44ch">Five agents · LangGraph · learning layer · live SSE demo · real USDA + Alameda data, all cited.</div>
+        <div class="mono mut" style="font-size:15px;margin-top:22px"><span class="sig">92% rescue rate</span>&nbsp;&nbsp;·&nbsp;&nbsp;+21 pts vs status quo&nbsp;&nbsp;·&nbsp;&nbsp;deployable</div>
       </div>
     </div>
     <div class="wm">Perishable Rescue<span class="g"> · Equity</span></div>

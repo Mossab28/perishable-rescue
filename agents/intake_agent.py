@@ -3,13 +3,19 @@ lot records the rest of the pipeline consumes. One job: turn messy input into cl
 No LLM here on purpose: parsing is not a judgment call.
 """
 import csv
+import io
 import config
 from state import PipelineState, emit
 
 AGENT = "intake"
 
+REQUIRED_INVENTORY_COLS = {"lot_id", "product", "category", "quantity_lbs",
+                           "received_date", "condition", "donor"}
 
-def _read_csv(name: str) -> list:
+
+def _read_csv(name: str, override_text: str = None) -> list:
+    if override_text is not None:
+        return list(csv.DictReader(io.StringIO(override_text)))
     path = config.DATA_DIR / name
     with open(path, newline="") as f:
         return list(csv.DictReader(f))
@@ -18,7 +24,17 @@ def _read_csv(name: str) -> list:
 def run(state: PipelineState) -> PipelineState:
     emit(state, type="agent_start", agent=AGENT, title="Intake")
 
-    raw = _read_csv("inventory.csv")
+    # Optional: an inventory CSV uploaded live in the browser overrides the committed file.
+    inv_text = state.get("inventory_csv")
+    if inv_text is not None:
+        header = (inv_text.splitlines() or [""])[0]
+        cols = {c.strip() for c in header.split(",")}
+        missing = REQUIRED_INVENTORY_COLS - cols
+        if missing:
+            raise ValueError(
+                "Uploaded CSV is missing required columns: " + ", ".join(sorted(missing))
+                + ". Expected header: " + ",".join(sorted(REQUIRED_INVENTORY_COLS)))
+    raw = _read_csv("inventory.csv", inv_text)
     lots = []
     for r in raw:
         lots.append({

@@ -94,6 +94,11 @@
   /* per-agent "what this does" intro, written to the chat before its reasoning */
   .msg.def{background:#0bb89a12;box-shadow:inset 3px 0 0 var(--signal-deep);border-top-color:transparent}
   .msg.def .txt{color:#0e3b33;font-size:14px}
+  .msg.learn{background:#0bb89a1f;box-shadow:inset 3px 0 0 var(--signal-deep);border-top-color:transparent}
+  .msg.learn .txt{color:#0e3b33;font-size:13.5px;font-weight:600}
+  .learn-callout-bg{fill:var(--ink);stroke:var(--signal);stroke-width:1.5}
+  .learn-callout-t{fill:var(--signal);font:700 12px var(--mono)}
+  .learn-callout-s{fill:var(--bone);font:700 13px var(--disp);letter-spacing:.02em}
   .placeholder{color:var(--mist);font-family:var(--mono);font-size:12px;text-align:center;margin-top:170px;letter-spacing:.04em}
   /* quick explanation row under the pipeline boxes (5 columns aligned to the nodes) */
   .acaps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:14px;border-top:1px solid var(--edge)}
@@ -144,6 +149,40 @@
   .veto .b{font-size:13.5px;color:var(--ink);margin-top:6px;line-height:1.45}
   .veto .b b{font-weight:600}
   .foot{padding:16px clamp(18px,4vw,48px);font-family:var(--mono);font-size:11px;color:var(--mist);letter-spacing:.03em}
+
+  /* dispatch map */
+  .maprow{border-bottom:1px solid var(--edge);padding:22px clamp(18px,3vw,30px)}
+  .maphead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:12px}
+  .maphead h2{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--graphite);display:flex;align-items:center;gap:9px;margin:0}
+  .maplegend{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--graphite);letter-spacing:.02em}
+  .maplegend .li{display:flex;align-items:center;gap:6px}
+  .maplegend .sw{width:16px;height:0;border-top:2px solid var(--signal-deep)}
+  .maplegend .sw.warm{border-top-color:var(--high)}
+  .maplegend .sw.veto{border-top-style:dashed;border-top-color:var(--critical)}
+  .maplegend .swdot{width:10px;height:10px;border-radius:999px;background:var(--edge-strong);border:1.5px solid var(--ink)}
+  svg#map{width:100%;height:auto;display:block;overflow:visible;background:linear-gradient(160deg,#efe8dc,#e7dfce)}
+  .m-grid{stroke:var(--edge);stroke-width:1;opacity:.55}
+  .m-frame{fill:none;stroke:var(--edge-strong);stroke-width:1.5}
+  .m-depot{fill:var(--ink);stroke:var(--signal);stroke-width:2.5}
+  .m-depot-t{fill:var(--ink);font:700 13px var(--disp);letter-spacing:.02em}
+  .m-depot-s{fill:var(--graphite);font:11px var(--mono)}
+  .m-ag{fill:var(--raised);stroke:var(--edge-strong);stroke-width:1.75;transition:all .3s ease}
+  .m-ag.hi{fill:#c0392b18;stroke:var(--critical)}
+  .m-ag.served{stroke:var(--signal-deep);stroke-width:3;fill:#0bb89a1a}
+  .m-ag-t{fill:var(--ink);font:600 13px var(--body)}
+  .m-ag-n{fill:var(--graphite);font:11px var(--mono)}
+  .m-route{fill:none;stroke:var(--signal-deep);stroke-width:2.5;opacity:0;stroke-dasharray:6 7;animation:flow 1.4s linear infinite}
+  .m-route.warm{stroke:var(--high)}
+  .m-route.show{opacity:.85}
+  .m-lbs{fill:var(--ink);font:700 12px var(--mono)}
+  .m-lbs-bg{fill:var(--bone);stroke:var(--edge-strong);stroke-width:1}
+  .m-veto-ring{fill:none;stroke:var(--critical);stroke-width:2.5;opacity:0}
+  .m-veto-ring.show{opacity:1;animation:sig 1.5s ease-in-out infinite}
+  .m-veto-chip{fill:#c0392b12;stroke:var(--critical);stroke-width:1.5}
+  .m-veto-t{fill:var(--critical);font:700 11px var(--disp);letter-spacing:.06em}
+  .m-compass{fill:var(--graphite);font:700 13px var(--disp);letter-spacing:.1em}
+  .m-truck{filter:drop-shadow(0 0 5px var(--signal))}
+
   .hidden{display:none}
 </style>
 </head>
@@ -158,9 +197,12 @@
       <div class="controls">
         <div class="btnrow">
           <button class="primary" id="runBtn"><span class="dot"></span>Run pipeline</button>
+          <button id="uploadBtn" title="Upload your own inventory CSV and dispatch it live">⬆ Upload CSV</button>
           <button id="freshBtn" title="Ignore learned rules — 'run #1' baseline">Fresh run</button>
         </div>
+        <input type="file" id="fileInput" accept=".csv,text/csv" class="hidden" />
         <div class="badges">
+          <span class="badge stamp" id="sourceBadge" style="color:var(--graphite)">source · sample data · <a href="#" id="sampleLink" style="color:var(--signal-deep);text-decoration:underline">get template</a></span>
           <span class="badge stamp" id="engineBadge" style="color:var(--graphite)">engine —</span>
           <span class="badge stamp" id="modelBadge" style="color:var(--graphite)">model —</span>
         </div>
@@ -194,6 +236,21 @@
   </div>
 
   <div class="wrap">
+    <div class="maprow">
+      <div class="maphead">
+        <h2><span class="pulse" id="p3"></span>Dispatch map · Alameda County — live allocation</h2>
+        <div class="maplegend">
+          <span class="li"><span class="swdot"></span> agency · size = need</span>
+          <span class="li"><span class="sw"></span> cold-chain route</span>
+          <span class="li"><span class="sw warm"></span> ambient route</span>
+          <span class="li"><span class="sw veto"></span> vetoed · held at warehouse</span>
+        </div>
+      </div>
+      <svg id="map" viewBox="0 0 1000 620" role="img" aria-label="Dispatch map of Alameda County food-bank agencies"></svg>
+    </div>
+  </div>
+
+  <div class="wrap">
     <div id="report" class="hidden">
       <div class="rhead">
         <div class="kpi">
@@ -213,10 +270,10 @@
 const AGENTS = [
   {id:"intake", icon:"🧾", title:"Intake", role:"parse records", tag:"DETERMINISTIC", type:"det", x:14,
    blurb:"Raw receiving line → clean, typed lot record",
-   desc:"Turns each raw receiving line into a clean, typed lot. E.g. “120 lbs strawberries, received July 15, condition Fair, Safeway” becomes a structured record with a category, an age and a condition — no judgment, just parsing."},
+   desc:"Turns each raw receiving line into a clean, typed lot. E.g. “120 lbs strawberries, received July 15, condition Fair, Safeway” becomes a structured record with a category, an age and a condition. Every lot keeps a traceable identity — ID, donor, condition, location — so the pipeline always knows exactly which unit is where."},
   {id:"risk", icon:"⏱️", title:"Risk", role:"hours until unsafe", tag:"LLM + MATH", type:"llm", x:237,
    blurb:"Hours-until-unsafe, from real shelf-life math",
-   desc:"Does the math. Strawberries (Fresh Produce, 5-day shelf) in Fair condition and already 2 days old may have only ~18 h left; raw chicken (Meat & Poultry, ~2-day shelf) can flip to at-risk within a day. It also checks how fast the network is actually clearing that category before flagging — then the LLM writes the plain-language reason."},
+   desc:"Does the math. Strawberries (Fresh Produce, 5-day shelf) in Fair condition and already 2 days old may have only ~18 h left; raw chicken (Meat & Poultry, ~2-day shelf) can flip to at-risk within a day. It also checks how fast the network is actually clearing that category before flagging. This is the traceability answer: the system pinpoints the exact at-risk lot, its remaining safe window, and where it's headed — before it spoils. Then the LLM writes the plain-language reason."},
   {id:"need_equity", icon:"⚖️", title:"Need & Equity", role:"rank by need + drift", tag:"LLM", type:"llm", x:460,
    blurb:"Ranks agencies by real need, corrects drift",
    desc:"Decides who should get it. An East Oakland agency (zip 94621) with a high need score but bread-heavy recent orders is under-served on produce and protein — that's demand drift. It bumps that agency up for exactly those categories and returns a ranked shortlist, not one pick, so Logistics has fallbacks."},
@@ -308,6 +365,35 @@ function sendPacket(edgeId,color){
   setTimeout(()=>c.remove(),1050);
 }
 
+let learnEls=[];
+function clearLearnCallout(){learnEls.forEach(e=>e.remove());learnEls=[];}
+function animateLearning(l){
+  if(!l)return;
+  clearLearnCallout();
+  // 1) write path: this run's discoveries flow Coordinator → Learned Rules
+  sendPacket("e_coord_skills",SIGNAL);
+  // 2) reads: the store then feeds Risk & Need for the *next* run
+  setTimeout(()=>{sendPacket("e_skills_risk",SIGNAL);sendPacket("e_skills_need",SIGNAL);},750);
+  // expanding ring around the store
+  const ring=el("rect",{x:STORE.x-6,y:STORE.y-6,width:STORE.w+12,height:STORE.h+12,fill:"none",stroke:SIGDEEP,"stroke-width":2.5,opacity:0});
+  ring.appendChild(el("animate",{attributeName:"opacity",values:"0.9;0",dur:"1.7s",begin:"0s",fill:"freeze"}));
+  nodesG.appendChild(ring);setTimeout(()=>ring.remove(),1800);
+  // persistent callout under the store: what grew this run
+  const newRules=Math.max(0,(l.n_rules_after||0)-(l.n_rules_before||0));
+  const cy0=STORE.y+STORE.h+14, cx0=STORE.x, cw=STORE.w;
+  const g=el("g");
+  g.appendChild(el("rect",{class:"learn-callout-bg",x:cx0,y:cy0,width:cw,height:46,rx:3}));
+  const line1 = newRules>0 ? `+${newRules} new rule${newRules>1?"s":""} written this run`
+                           : `${l.discoveries?l.discoveries.length:0} pattern${(l.discoveries&&l.discoveries.length===1)?"":"s"} reinforced`;
+  g.appendChild(txt("learn-callout-s",cx0+16,cy0+21,line1));
+  g.appendChild(txt("learn-callout-t",cx0+16,cy0+38,`runs of learning ${l.runs_completed_before}→${l.runs_completed_after} · rules ${l.n_rules_before}→${l.n_rules_after} · next run starts sharper`));
+  nodesG.appendChild(g);learnEls.push(g);
+  // highlighted stream line
+  const d0=(l.discoveries&&l.discoveries.length)?l.discoveries[0]:null;
+  const disc=d0?` Learned (${d0.scope||d0.agent||"pattern"}): ${(d0.rule||"a new pattern").slice(0,90)}${(d0.rule||"").length>90?"…":""}`:"";
+  addMsg("orchestrator",`🧠 Learning layer updated.${disc} Rules ${l.n_rules_before}→${l.n_rules_after}, runs ${l.runs_completed_before}→${l.runs_completed_after}. The system just made the next run sharper.`,"learn");
+}
+
 const stream=$("#stream");
 const meta={intake:["Intake","deterministic"],risk:["Risk","llm + math"],need_equity:["Need & Equity","llm"],logistics:["Logistics","hard gate"],coordinator:["Coordinator","llm"],orchestrator:["Orchestrator","control"]};
 function addMsg(agent,text,cls){
@@ -323,15 +409,19 @@ let running=false,lastDone=null;
 function resetUI(){
   lastDone=null;stream.innerHTML='<div class="placeholder">Dispatching…</div>';
   $("#report").classList.add("hidden");$("#planGrid").innerHTML="";$("#vetoWrap").innerHTML="";$("#learnbar").innerHTML="";$("#foot").innerHTML="";$("#contrast").innerHTML="";
-  $("#p1").classList.add("on");$("#p2").classList.add("on");
+  $("#p1").classList.add("on");$("#p2").classList.add("on");$("#p3")&&$("#p3").classList.add("on");
+  if(window.resetDispatchMap)window.resetDispatchMap();
+  if(typeof clearLearnCallout==="function")clearLearnCallout();
   for(const a of AGENTS){nodeEls[a.id].g.classList.remove("active","done");nodeEls[a.id].g.classList.add("idle");nodeEls[a.id].sum.textContent="";nodeEls[a.id].role.style.display="";}
   document.querySelectorAll(".edge.hot").forEach(e=>e.classList.remove("hot"));
 }
-function endUI(){running=false;$("#runBtn").disabled=false;$("#freshBtn").disabled=false;$("#p1").classList.remove("on");$("#p2").classList.remove("on");}
-function startRun(fresh){
+function endUI(){running=false;$("#runBtn").disabled=false;$("#freshBtn").disabled=false;$("#uploadBtn").disabled=false;$("#p1").classList.remove("on");$("#p2").classList.remove("on");$("#p3")&&$("#p3").classList.remove("on");}
+function startRun(fresh,src){
   if(running)return;running=true;resetUI();
-  $("#runBtn").disabled=true;$("#freshBtn").disabled=true;
-  const es=new EventSource(`/run?fresh=${fresh?1:0}&persist=${fresh?0:1}`);
+  $("#runBtn").disabled=true;$("#freshBtn").disabled=true;$("#uploadBtn").disabled=true;
+  let url=`/run?fresh=${fresh?1:0}&persist=${fresh?0:1}`;
+  if(src)url+=`&src=${encodeURIComponent(src)}`;
+  const es=new EventSource(url);
   es.onmessage=(e)=>handle(JSON.parse(e.data));
   es.addEventListener("end",()=>{es.close();endUI();});
   es.onerror=()=>{es.close();endUI();};
@@ -357,8 +447,8 @@ function handle(ev){
         const s=(ev.summary||"").replace(/ · (llm|fallback)$/,"");
         n.role.style.display="none";n.sum.textContent=s.length>22?s.slice(0,21)+"…":s;}
       lastDone=ev.agent;break;}
-    case "final_report": renderReport(ev.plan); break;
-    case "run_done": sendPacket("e_coord_skills",SIGNAL); renderLearning(ev.learning,ev.llm_stats); renderContrast(ev.baseline); break;
+    case "final_report": renderReport(ev.plan); if(window.renderDispatchMap)window.renderDispatchMap(ev.plan); break;
+    case "run_done": renderLearning(ev.learning,ev.llm_stats); renderContrast(ev.baseline); animateLearning(ev.learning); break;
     case "error": addMsg("orchestrator","error: "+ev.message,"event"); break;
   }
 }
@@ -416,13 +506,179 @@ function renderContrast(b){
      </div>
      <div class="cwhy">The status quo fulfils orders as written and dispatches the nearest truck — so it <b>spoils ${lbs(b.naive_spoiled_lbs)}</b> of cold food on warm routes and sends produce/protein to whoever already orders it, delivering <b>${lbs(b.naive_high_need_lbs)}</b> to the highest-need neighborhoods. The five agents catch exactly what a single pass blurs: the cold-chain veto, and the ${b.drift_corrected} demand-drift correction${b.drift_corrected===1?"":"s"} that redirect nutrition to where it's needed most.</div>`;
 }
-$("#runBtn").onclick=()=>startRun(false);
+$("#runBtn").onclick=()=>{setSource(null);startRun(false);};
 $("#freshBtn").onclick=()=>startRun(true);
+
+// ── Live CSV upload → dispatch ──
+function setSource(name){
+  const b=$("#sourceBadge");
+  if(name){b.style.color="var(--signal-deep)";b.innerHTML=`source · <b>${name}</b> (uploaded)`;}
+  else{b.style.color="var(--graphite)";b.innerHTML=`source · sample data · <a href="#" id="sampleLink" style="color:var(--signal-deep);text-decoration:underline">get template</a>`;bindSample();}
+}
+$("#uploadBtn").onclick=()=>$("#fileInput").click();
+$("#fileInput").onchange=async(e)=>{
+  const f=e.target.files[0]; if(!f)return;
+  const text=await f.text();
+  setSource(f.name);
+  try{
+    const r=await fetch("/upload",{method:"POST",headers:{"Content-Type":"text/csv"},body:text});
+    const {id}=await r.json();
+    startRun(false,id);
+  }catch(err){addMsg("orchestrator","upload failed: "+err,"event");}
+  e.target.value="";
+};
+const SAMPLE_CSV=`lot_id,product,category,quantity_lbs,received_date,condition,donor
+L01,Romaine Lettuce,Fresh Produce,800,2026-07-13,Good,Safeway
+L02,Whole Milk (gallons),Dairy,600,2026-07-12,Good,Costco
+L03,Strawberries,Fresh Produce,120,2026-07-15,Fair,Berkeley Bowl
+L04,Chicken Breast,Meat & Poultry,300,2026-07-16,Good,Local Farm
+L05,Bagels,Bakery & Bread,220,2026-07-14,Good,Noah's
+L19,Pork Sausage,Meat & Poultry,300,2026-07-16,Good,Local Farm`;
+function bindSample(){const s=$("#sampleLink");if(!s)return;s.onclick=(e)=>{
+  e.preventDefault();
+  const blob=new Blob([SAMPLE_CSV],{type:"text/csv"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="inventory_template.csv";a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+};}
+bindSample();
+// Optional kiosk mode: /?autorun=1 dispatches the sample run automatically on load.
+if(new URLSearchParams(location.search).get("autorun")==="1"){setTimeout(()=>startRun(false),600);}
 fetch("/config").then(r=>r.json()).then(c=>{
   $("#modelBadge").textContent="model · "+(c.llm_enabled?c.model:"fallback");
   const b=$("#engineBadge");b.className="badge stamp "+(c.llm_enabled?"live":"fallback");
   b.textContent=(c.llm_enabled?"engine · LLM+rules":"engine · rule-based");
 }).catch(()=>{});
+</script>
+
+<script>
+/* ── Dispatch map ── self-contained, offline. Real agency lat/long + routes from the committed data. */
+(function(){
+  const NSm="http://www.w3.org/2000/svg";
+  const svg=document.getElementById("map"); if(!svg) return;
+  const E=(t,a={})=>{const e=document.createElementNS(NSm,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  const T=(cls,x,y,s,extra={})=>{const e=E("text",Object.assign({class:cls,x,y},extra));e.textContent=s;return e;};
+  const reduceM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Real committed data (data/agencies.csv, data/routes.csv)
+  const DEPOT={name:"ACCFB",sub:"Warehouse · Oakland",lat:37.7446,long:-122.1863};
+  const AGENCIES=[
+    {id:"A01",name:"East Oakland Community Pantry",short:"East Oakland",lat:37.7375,long:-122.1825,need:92,zip:"94621"},
+    {id:"A02",name:"West Oakland Neighborhood Table",short:"West Oakland",lat:37.8060,long:-122.2900,need:85,zip:"94607"},
+    {id:"A03",name:"Fruitvale Family Kitchen",short:"Fruitvale",lat:37.7750,long:-122.2240,need:80,zip:"94601"},
+    {id:"A04",name:"Hayward Meals Collective",short:"Hayward",lat:37.6300,long:-122.0800,need:72,zip:"94544"},
+    {id:"A05",name:"San Leandro Shared Harvest",short:"San Leandro",lat:37.7220,long:-122.1560,need:58,zip:"94577"},
+    {id:"A06",name:"South Berkeley Food Project",short:"S. Berkeley",lat:37.8650,long:-122.2580,need:52,zip:"94704"},
+    {id:"A07",name:"Newark Community Cupboard",short:"Newark",lat:37.5200,long:-122.0400,need:45,zip:"94560"},
+    {id:"A08",name:"Fremont Family Resource Pantry",short:"Fremont",lat:37.5580,long:-121.9880,need:40,zip:"94536"},
+    {id:"A09",name:"Livermore Valley Outreach",short:"Livermore",lat:37.6820,long:-121.7680,need:30,zip:"94550"},
+    {id:"A10",name:"Pleasanton Helping Hands",short:"Pleasanton",lat:37.6620,long:-121.8750,need:25,zip:"94566"},
+  ];
+  const ROUTES=[
+    {id:"R1",refrig:true, zips:["94621","94607","94601"]},
+    {id:"R2",refrig:true, zips:["94544","94577"]},
+    {id:"R3",refrig:false,zips:["94704","94560"]},
+    {id:"R4",refrig:true, zips:["94536","94550","94566"]},
+  ];
+  const routeForZip=(zip)=>ROUTES.find(r=>r.zips.includes(zip));
+
+  // Projection (north up), padded to viewBox
+  const W=1000,H=620,PAD=78;
+  const lats=AGENCIES.map(a=>a.lat).concat(DEPOT.lat), lons=AGENCIES.map(a=>a.long).concat(DEPOT.long);
+  const minLat=Math.min(...lats),maxLat=Math.max(...lats),minLon=Math.min(...lons),maxLon=Math.max(...lons);
+  const px=(lon)=>PAD+(lon-minLon)/(maxLon-minLon)*(W-2*PAD);
+  const py=(lat)=>PAD+(maxLat-lat)/(maxLat-minLat)*(H-2*PAD);
+  const rNeed=(n)=>7+n/100*11;
+
+  const gStatic=E("g"), gDyn=E("g");
+  const dp={x:px(DEPOT.long),y:py(DEPOT.lat)};
+  const nodePos={}; AGENCIES.forEach(a=>nodePos[a.id]={x:px(a.long),y:py(a.lat)});
+  const nodeByName={}; AGENCIES.forEach(a=>nodeByName[a.name]=a);
+  const nodeById={}; AGENCIES.forEach(a=>nodeById[a.id]=a);
+  const findAgency=(row)=> nodeById[row.agency_id] || nodeByName[row.agency_name];
+
+  function drawStatic(){
+    gStatic.innerHTML="";
+    // frame + faint grid
+    gStatic.appendChild(E("rect",{class:"m-frame",x:PAD-30,y:PAD-40,width:W-2*(PAD-30),height:H-2*(PAD-40)}));
+    for(let i=1;i<5;i++){const x=PAD-30+i*(W-2*(PAD-30))/5;gStatic.appendChild(E("line",{class:"m-grid",x1:x,y1:PAD-40,x2:x,y2:H-(PAD-40)}));}
+    for(let i=1;i<4;i++){const y=PAD-40+i*(H-2*(PAD-40))/4;gStatic.appendChild(E("line",{class:"m-grid",x1:PAD-30,y1:y,x2:W-(PAD-30),y2:y}));}
+    gStatic.appendChild(T("m-compass",W-(PAD-30)-22,PAD-40+24,"N ↑"));
+    // agencies
+    AGENCIES.forEach(a=>{
+      const p=nodePos[a.id];
+      const c=E("circle",{class:"m-ag"+(a.need>=75?" hi":""),id:"mag_"+a.id,cx:p.x,cy:p.y,r:rNeed(a.need)});
+      gStatic.appendChild(c);
+      const tx=p.x+rNeed(a.need)+7;
+      gStatic.appendChild(T("m-ag-t",tx,p.y-1,a.short));
+      gStatic.appendChild(T("m-ag-n",tx,p.y+13,"need "+a.need));
+    });
+    // depot on top — label placed ABOVE the diamond (it sits right next to East Oakland)
+    gStatic.appendChild(E("rect",{class:"m-depot",x:dp.x-13,y:dp.y-13,width:26,height:26,transform:`rotate(45 ${dp.x} ${dp.y})`}));
+    gStatic.appendChild(T("m-depot-t",dp.x,dp.y-24,"ACCFB warehouse",{"text-anchor":"middle"}));
+    gStatic.appendChild(T("m-depot-s",dp.x,dp.y-40,"origin",{"text-anchor":"middle"}));
+  }
+
+  function reset(){
+    gDyn.innerHTML="";
+    AGENCIES.forEach(a=>{const c=document.getElementById("mag_"+a.id);if(c)c.classList.remove("served");});
+  }
+
+  function truck(pathId,warm,delay){
+    if(reduceM)return;
+    const path=document.getElementById(pathId);if(!path)return;
+    const c=E("circle",{class:"m-truck",r:6,fill:warm?"#B5651D":"#00F0C0",opacity:0});
+    const anim=E("animateMotion",{dur:"1.15s",begin:delay+"s",repeatCount:"1",fill:"freeze"});
+    const mp=E("mpath");mp.setAttributeNS("http://www.w3.org/1999/xlink","href","#"+pathId);
+    anim.appendChild(mp);c.appendChild(anim);
+    const show=E("animate",{attributeName:"opacity",values:"0;1;1;0",dur:"1.15s",begin:delay+"s",fill:"freeze"});
+    c.appendChild(show);gDyn.appendChild(c);
+  }
+
+  window.resetDispatchMap=reset;
+  window.renderDispatchMap=function(plan){
+    reset();
+    if(!plan) return;
+    const rows=plan.rows||[];
+    let i=0;
+    for(const row of rows){
+      const a=findAgency(row); if(!a) continue;
+      const p=nodePos[a.id];
+      const rt=routeForZip(a.zip); const warm=rt?!rt.refrig:false;
+      const id="mroute_"+a.id;
+      // curved dispatch path depot -> agency
+      const mx=(dp.x+p.x)/2, my=(dp.y+p.y)/2-Math.min(110,Math.abs(p.x-dp.x)*0.35+40+i*14);
+      const path=E("path",{class:"m-route"+(warm?" warm":""),id,d:`M ${dp.x} ${dp.y} Q ${mx} ${my} ${p.x} ${p.y}`});
+      gDyn.appendChild(path);
+      const delay=i*0.28;
+      setTimeout(()=>path.classList.add("show"),delay*1000+50);
+      truck(id,warm,delay);
+      // lbs label placed along each route (t≈0.62) so labels don't pile up at a shared apex
+      const t=0.62,it=1-t;
+      const lx=it*it*dp.x+2*it*t*mx+t*t*p.x, ly=it*it*dp.y+2*it*t*my+t*t*p.y;
+      const lbs=Math.round(row.lbs)+" lbs";
+      const lw=lbs.length*7.5+14;
+      setTimeout(()=>{
+        gDyn.appendChild(E("rect",{class:"m-lbs-bg",x:lx-lw/2,y:ly-11,width:lw,height:20,rx:2}));
+        gDyn.appendChild(T("m-lbs",lx,ly+4,lbs,{"text-anchor":"middle"}));
+      },delay*1000+700);
+      const c=document.getElementById("mag_"+a.id); if(c) setTimeout(()=>c.classList.add("served"),delay*1000+900);
+      i++;
+    }
+    // vetoed lots — held at warehouse for manual handling
+    const vetoed=plan.vetoed||[];
+    if(vetoed.length){
+      const vlbs=vetoed.reduce((s,v)=>s+(v.quantity_lbs||0),0);
+      gDyn.appendChild(E("circle",{class:"m-veto-ring show",cx:dp.x,cy:dp.y,r:26}));
+      const cw=210,cx0=dp.x-cw-24,cy0=dp.y+22;
+      gDyn.appendChild(E("rect",{class:"m-veto-chip",x:cx0,y:cy0,width:cw,height:38,rx:3}));
+      gDyn.appendChild(T("m-veto-t",cx0+12,cy0+16,"⛔ "+Math.round(vlbs)+" lbs held — cold-chain"));
+      gDyn.appendChild(T("m-veto-t",cx0+12,cy0+31,"routed to manual handling"));
+    }
+  };
+
+  drawStatic();
+  svg.appendChild(gStatic); svg.appendChild(gDyn);
+})();
 </script>
 </body>
 </html>

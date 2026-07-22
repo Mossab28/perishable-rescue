@@ -4,6 +4,7 @@ from typing import TypedDict, Any, Callable, Optional
 
 class PipelineState(TypedDict, total=False):
     run_date: str
+    inventory_csv: str      # optional: raw CSV uploaded live in the browser (overrides the file)
     lots: list              # Intake output: structured lot records
     shelf_life: dict        # category -> {days, refrigerated}
     agencies: list

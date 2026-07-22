@@ -35,7 +35,8 @@ def build_graph():
     return g.compile()
 
 
-def run_pipeline(emit_cb=None, fresh: bool = False, persist_learning: bool = True) -> dict:
+def run_pipeline(emit_cb=None, fresh: bool = False, persist_learning: bool = True,
+                 inventory_csv: str = None) -> dict:
     rules = {"version": 1, "runs_completed": 0, "rules": []} if fresh else learning.load_rules()
     init: PipelineState = {
         "run_date": config.RUN_DATE,
@@ -43,6 +44,8 @@ def run_pipeline(emit_cb=None, fresh: bool = False, persist_learning: bool = Tru
         "modes": {},
         "_emit": emit_cb,
     }
+    if inventory_csv is not None:
+        init["inventory_csv"] = inventory_csv
     if emit_cb:
         emit_cb({"type": "run_start", "run_date": config.RUN_DATE,
                  "llm_enabled": config.LLM_ENABLED, "model": config.OPENAI_MODEL,
